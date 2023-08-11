@@ -1,4 +1,2 @@
-# Back
-
+# Backend - Gestor de Gastos
 Grupo 1
-Backend del Gestor de Gastos
