@@ -30,6 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//ejecuta las migraciones pendientes
 PrepareDb.Population(app);
 
 app.UseAuthorization();
