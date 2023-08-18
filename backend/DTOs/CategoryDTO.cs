@@ -1,11 +1,10 @@
 ﻿namespace backend.DTOs
 {
-    public class BudgetDTO
+    public class CategoryDTO
     {
         public long Id { get; set; }
 
-        public double Balance { get; set; }
-
+        public string Name{ get; set; }
   
     }
 }
