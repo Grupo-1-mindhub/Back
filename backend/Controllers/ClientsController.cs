@@ -10,10 +10,12 @@ namespace backend.Controllers
     public class ClientsController : Controller
     {
         private IClientRepository _clientRepository;
+        private IAccountRepository _accountRepository;
 
-        public ClientsController(IClientRepository clientRepository)
+        public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository)
         { 
             _clientRepository = clientRepository;
+            _accountRepository = accountRepository;
         }
 
         [HttpGet] //cuando hagamos un peticion de tipo get al controlador va a responder con el sgte metodo
@@ -77,12 +79,8 @@ namespace backend.Controllers
                     Cards = client.Cards.Select(c => new CardDTO
                     {
                         Id = c.Id,
-                        CardHolder = c.CardHolder,
-                        Color = c.Color,
-                        Cvv = c.Cvv,
-                        FromDate = c.FromDate,
+                        DeadLine = c.Deadline,
                         Number = c.Number,
-                        ThruDate = c.ThruDate,
                         Type = c.Type
                     }).ToList(),
                 };
@@ -127,23 +125,12 @@ namespace backend.Controllers
                         CreationDate = ac.CreationDate,
                         Number = ac.Number
                     }).ToList(),
-                    Credits = client.ClientLoans.Select(cl => new ClientLoanDTO //a los loans le llamamos credits
-                    {
-                        Id = cl.Id,
-                        LoanId = cl.LoanId,
-                        Name = cl.Loan.Name,
-                        Amount = cl.Amount,
-                        Payments = int.Parse(cl.Payments)
-                    }).ToList(),
+                   
                     Cards = client.Cards.Select(c => new CardDTO
                     {
                         Id = c.Id,
-                        CardHolder = c.CardHolder,
-                        Color = c.Color,
-                        Cvv = c.Cvv,
-                        FromDate = c.FromDate,
+                        DeadLine = c.Deadline,
                         Number = c.Number,
-                        ThruDate = c.ThruDate,
                         Type = c.Type
                     }).ToList()
                 };
