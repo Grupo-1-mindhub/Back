@@ -1,5 +1,6 @@
 using backend.Models;
 using backend.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Validations;
 
@@ -18,6 +19,7 @@ var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
 
 builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString));
+
 //builder.Services.AddScoped<IRepositoryBase, RepositoryBase>();
 //Esto se usa para sacar el string connection de appsettings.json
 //builder.Services.AddDbContext<MyContext>(options => 
@@ -50,6 +52,22 @@ if (app.Environment.IsDevelopment())
 PrepareDb.Population(app);
 
 app.UseAuthorization();
+
+//AUTENTICACION
+app.UseAuthentication();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                options.LoginPath = new PathString("/index.html");
+            });
+
+//autorización
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
+});
+
 
 app.MapControllers();
 
