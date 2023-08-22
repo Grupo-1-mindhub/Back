@@ -10,10 +10,12 @@ namespace backend.Controllers
     public class ClientsController : Controller
     {
         private IClientRepository _clientRepository;
+        private IAccountRepository _accountRepository;
 
-        public ClientsController(IClientRepository clientRepository)
+        public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository)
         { 
             _clientRepository = clientRepository;
+            _accountRepository = accountRepository;
         }
 
         [HttpGet] //cuando hagamos un peticion de tipo get al controlador va a responder con el sgte metodo
@@ -73,8 +75,14 @@ namespace backend.Controllers
                         CreationDate = ac.CreationDate,
                         Number = ac.Number
                     }).ToList(),
+                    Cards = client.Cards.Select(c => new CardDTO
+                    {
+                        Id = c.Id,
+                        DeadLine = c.Deadline,
+                        Number = c.Number,
+                        Type = c.Type
+                    }).ToList(),
 
-                  
                 };
                 return Ok(clientDTO);
             }
@@ -117,7 +125,14 @@ namespace backend.Controllers
                         CreationDate = ac.CreationDate,
                         Number = ac.Number
                     }).ToList(),
-                   
+                    Cards = client.Cards.Select(c => new CardDTO
+                    {
+                        Id = c.Id,
+                        DeadLine = c.Deadline,
+                        Number = c.Number,
+                        Type = c.Type
+                    }).ToList()
+
                 };
 
                 return Ok(clientDTO); //muestra el cliente en el Front
@@ -186,6 +201,5 @@ namespace backend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
     }
 }

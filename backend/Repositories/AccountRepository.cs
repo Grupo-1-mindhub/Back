@@ -13,27 +13,41 @@ namespace backend.Repositories
 
         public Account FindById(long id)
         {
-            throw new NotImplementedException();
+            return FindByCondition(account => account.Id == id)
+                .Include(account => account.Budgets)
+                .FirstOrDefault();
         }
-
-        public Account FindByNumber(string number)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Account> GetAccountsByClient(long clientId)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<Account> GetAllAccounts()
         {
-            throw new NotImplementedException();
+            return FindAll()
+                .Include(account => account.Budgets)
+                .ToList();
         }
 
         public void Save(Account account)
         {
-            throw new NotImplementedException();
+            if (account.Id == 0)
+            {
+                Create(account);
+            }
+            else
+            {
+                Update(account);
+            }
+
+            SaveChanges();
+        }
+        public IEnumerable<Account> GetAccountsByClient(long clientId)
+        {
+            return FindByCondition(account => account.ClientId == clientId)
+            .Include(account => account.Budgets)
+            .ToList();
+        }
+        public Account FindByNumber(string number)
+        {
+            return FindByCondition(account => account.Number.ToUpper() == number.ToUpper())
+            .Include(account => account.Budgets)
+            .FirstOrDefault();
         }
     }
 
