@@ -25,6 +25,18 @@ builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connect
 //builder.Services.AddDbContext<MyContext>(options => 
 //options.UseSqlServer(builder.Configuration.GetConnectionString("MyDBConnectionNet6"))); 
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                options.LoginPath = new PathString("/index.html");
+            });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
+});
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -55,18 +67,8 @@ app.UseAuthorization();
 
 //AUTENTICACION
 app.UseAuthentication();
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-                options.LoginPath = new PathString("/index.html");
-            });
 
 //autorización
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
-});
 
 
 app.MapControllers();
