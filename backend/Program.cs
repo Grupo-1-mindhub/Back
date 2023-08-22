@@ -25,19 +25,6 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 //Esto se usa para sacar el string connection de appsettings.json
 //builder.Services.AddDbContext<MyContext>(options => 
 //options.UseSqlServer(builder.Configuration.GetConnectionString("MyDBConnectionNet6"))); 
-//AUTENTICACION
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-                options.LoginPath = new PathString("/index.html");
-            });
-
-//autorización
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
-});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -77,19 +64,19 @@ if (app.Environment.IsDevelopment())
 //ejecuta las migraciones pendientes
 PrepareDb.Population(app);
 
-app.UseAuthorization();
 
-//AUTENTICACION
+//app.UseRouting();
+
+app.UseAuthorization();
 app.UseAuthentication();
 
-app.UseRouting();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllers();
+//});
 
 
-//app.MapControllers();
+app.MapControllers();
 
 app.Run();
 
