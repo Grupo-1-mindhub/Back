@@ -20,7 +20,8 @@ var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=s
 
 builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString));
 
-//builder.Services.AddScoped<IRepositoryBase, RepositoryBase>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 //Esto se usa para sacar el string connection de appsettings.json
 //builder.Services.AddDbContext<MyContext>(options => 
 //options.UseSqlServer(builder.Configuration.GetConnectionString("MyDBConnectionNet6"))); 
@@ -68,10 +69,13 @@ app.UseAuthorization();
 //AUTENTICACION
 app.UseAuthentication();
 
-//autorización
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
-
-app.MapControllers();
+//app.MapControllers();
 
 app.Run();
 
