@@ -76,8 +76,8 @@ if (app.Environment.IsDevelopment())
 
 //ejecuta las migraciones pendientes
 PrepareDb.Population(app);
-
 app.UseAuthorization();
+<<<<<<< HEAD
 
 //AUTENTICACION
 app.UseAuthentication();
@@ -91,5 +91,7 @@ app.UseEndpoints(endpoints =>
 
 //app.MapControllers();
 
+=======
+app.MapControllers();
+>>>>>>> confirmo cambios locales
 app.Run();
-
