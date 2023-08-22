@@ -74,17 +74,7 @@ namespace backend.Controllers
                         Number = ac.Number
                     }).ToList(),
 
-                    Cards = client.Cards.Select(c => new CardDTO
-                    {
-                        Id = c.Id,
-                        CardHolder = c.CardHolder,
-                        Color = c.Color,
-                        Cvv = c.Cvv,
-                        FromDate = c.FromDate,
-                        Number = c.Number,
-                        ThruDate = c.ThruDate,
-                        Type = c.Type
-                    }).ToList(),
+                  
                 };
                 return Ok(clientDTO);
             }
@@ -127,25 +117,7 @@ namespace backend.Controllers
                         CreationDate = ac.CreationDate,
                         Number = ac.Number
                     }).ToList(),
-                    Credits = client.ClientLoans.Select(cl => new ClientLoanDTO //a los loans le llamamos credits
-                    {
-                        Id = cl.Id,
-                        LoanId = cl.LoanId,
-                        Name = cl.Loan.Name,
-                        Amount = cl.Amount,
-                        Payments = int.Parse(cl.Payments)
-                    }).ToList(),
-                    Cards = client.Cards.Select(c => new CardDTO
-                    {
-                        Id = c.Id,
-                        CardHolder = c.CardHolder,
-                        Color = c.Color,
-                        Cvv = c.Cvv,
-                        FromDate = c.FromDate,
-                        Number = c.Number,
-                        ThruDate = c.ThruDate,
-                        Type = c.Type
-                    }).ToList()
+                   
                 };
 
                 return Ok(clientDTO); //muestra el cliente en el Front
@@ -191,7 +163,6 @@ namespace backend.Controllers
                     Balance = 0,
                     ClientId = newClient.Id,
                 };
-                _accountRepository.Save(newAccount);
 
                 ClientDTO newCDTO = new ClientDTO
                 {
