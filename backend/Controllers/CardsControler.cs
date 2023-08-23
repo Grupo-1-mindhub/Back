@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class CardsControler : ControllerBase
     {
@@ -54,6 +54,7 @@ namespace backend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpGet("clients/current/cards")]
         public IActionResult Post([FromBody] Card card)
         {
             try
