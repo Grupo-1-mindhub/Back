@@ -8,6 +8,11 @@ namespace HomeBanking.Repositories
     {
         public TransactionRepository(MyContext repositoryContext) : base(repositoryContext) { }
 
+        public IEnumerable<Transaction> GetAllTransactions()
+        {
+            return FindAll().
+                ToList();
+        }
         public Transaction FindByNumber(long id)
         {
             return FindByCondition(transaction => transaction.Id == id).FirstOrDefault();
