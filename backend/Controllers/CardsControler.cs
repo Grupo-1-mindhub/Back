@@ -40,6 +40,9 @@ namespace backend.Controllers
                     var newCardDTO = new CardDTO()
                     {
                         Id = card.Id,
+                        Type = card.Type,
+                        Number = card.Number,
+                        DeadLine=card.Deadline
                         //agregar info aca
                     };
                     cardsDTO.Add(newCardDTO);
