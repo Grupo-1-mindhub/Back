@@ -1,4 +1,4 @@
-﻿namespace backend.Models
+﻿namespace backend.Enumerates
 {
     public enum CategoryType
     {

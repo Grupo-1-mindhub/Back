@@ -1,6 +1,9 @@
 ﻿namespace backend.Enumerates
 {
-    public class PaymentMethod
+    public enum PaymentMethodType
     {
+        EFECTIVO,
+        DEBITO,
+        CREDITO
     }
 }

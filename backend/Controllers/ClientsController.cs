@@ -39,6 +39,7 @@ namespace backend.Controllers
                         {
                             Id = ac.Id,
                             Balance = ac.Balance,
+                            Description = ac.Description,
                             CreationDate = ac.CreationDate,
                             Number = ac.Number
                         }).ToList(),
@@ -72,6 +73,7 @@ namespace backend.Controllers
                     {
                         Id = ac.Id,
                         Balance = ac.Balance,
+                        Description = ac.Description,
                         CreationDate = ac.CreationDate,
                         Number = ac.Number
                     }).ToList(),
@@ -122,6 +124,7 @@ namespace backend.Controllers
                     {
                         Id = ac.Id,
                         Balance = ac.Balance,
+                        Description = ac.Description,
                         CreationDate = ac.CreationDate,
                         Number = ac.Number
                     }).ToList(),
@@ -168,17 +171,16 @@ namespace backend.Controllers
                     LastName = client.LastName,
                 };
                 _clientRepository.Save(newClient); //usamos el repo para utilizar el metodo SAVE 
-
-                Random random = new Random();
-                string numeroAleatorio = random.Next(0, 100000000).ToString("D8");
+                int num = 001;
                 Account newAccount = new Account
                 {
-                    Number = "VIN-" + numeroAleatorio,
+                    Number = num.ToString("D3"),
+                    Description=string.Empty,
                     CreationDate = DateTime.Now,
                     Balance = 0,
                     ClientId = newClient.Id,
                 };
-
+                _accountRepository.Save(newAccount);
                 ClientDTO newCDTO = new ClientDTO
                 {
                     Id = newClient.Id,
@@ -189,6 +191,7 @@ namespace backend.Controllers
                     {
                         Id = account.Id,
                         Number = account.Number,
+                        Description = account.Description,
                         CreationDate = account.CreationDate,
                         Balance = account.Balance,
                     }).ToList()
