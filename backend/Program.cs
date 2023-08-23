@@ -39,6 +39,16 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
 
 var app = builder.Build();
 
@@ -66,6 +76,8 @@ if (app.Environment.IsDevelopment())
 //ejecuta las migraciones pendientes
 PrepareDb.Population(app);
 
+
+app.UseCors("MyCorsPolicy");
 
 //app.UseRouting();
 
