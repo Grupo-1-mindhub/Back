@@ -13,18 +13,21 @@ namespace backend.Repositories
 
         public Category FindById(long id)
         {
-            throw new NotImplementedException();
+            return FindByCondition(category => category.Id == id)
+               .FirstOrDefault();
         }
 
         public IEnumerable<Category> GetAllCategorys()
         {
-            throw new NotImplementedException();
+            return FindAll()
+              .Include(category => category.Budgets)
+              .ToList();
         }
 
         public void Save(Category category)
         {
-            throw new NotImplementedException();
+            Create(category);
+            SaveChanges();
         }
     }
-
 }
