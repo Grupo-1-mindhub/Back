@@ -22,6 +22,8 @@ builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connect
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
 //Esto se usa para sacar el string connection de appsettings.json
 //builder.Services.AddDbContext<MyContext>(options => 
 //options.UseSqlServer(builder.Configuration.GetConnectionString("MyDBConnectionNet6"))); 
