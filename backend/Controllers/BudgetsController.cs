@@ -18,7 +18,7 @@ namespace backend.Controllers
             _clientRepository = clientRepository;
         }
 
-        [HttpGet("budget")]
+        [HttpGet("accounts/{id}/budgets")]
         public IActionResult Get()
         {
             try
