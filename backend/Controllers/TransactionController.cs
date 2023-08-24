@@ -21,36 +21,6 @@ namespace backend.Controllers
             _transactionRepository = transactionRepository;
         }
 
-        //[HttpGet("current")]
-        //public IActionResult Get()
-        //{
-        //    try
-        //    {
-
-        //        Client client = _clientRepository.FindByEmail(email);
-
-        //        if (client == null)
-        //        {
-        //            return Forbid();
-        //        }
-        //        var transactionDTO = new List<TransactionDTO>();
-        //        foreach (Transaction transaction in client.Transactions)
-        //        {
-        //            var newTransactionDTO = new TransactionDTO()
-        //            {
-        //                Id = transaction.Id,
-        //                Amount = transaction.Amount,
-        //                Description = transaction.Description,
-        //            };
-        //            transactionDTO.Add(newTransactionDTO);
-        //        }
-        //        return Ok(transactionDTO);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
         [HttpGet]
         public IActionResult Get() 
         {
@@ -83,7 +53,7 @@ namespace backend.Controllers
             try
             {
 
-                if (transactionDTO.Amount == 0) 
+                if (transactionDTO.Amount <= 0) 
                 {
                     return Forbid("El monto debe ser superior a 0");
                 }
