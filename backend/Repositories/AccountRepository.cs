@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using backend.Controllers;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -15,6 +16,7 @@ namespace backend.Repositories
         {
             return FindByCondition(account => account.Id == id)
                 .Include(account => account.Budgets)
+                    .ThenInclude(budget => budget.Transactions)
                 .FirstOrDefault();
         }
         public IEnumerable<Account> GetAllAccounts()

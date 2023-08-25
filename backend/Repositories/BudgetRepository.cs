@@ -24,7 +24,15 @@ namespace backend.Repositories
 
         public void Save(Budget budget)
         {
-            Create(budget);
+            if (budget.Id == 0)
+            {
+                Create(budget);
+            }
+            else
+            {
+                Update(budget);
+            }
+
             SaveChanges();
         }
     }

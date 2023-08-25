@@ -1,4 +1,5 @@
 ﻿using backend.DTOs;
+using backend.Enumerates;
 using backend.Models;
 using backend.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -11,28 +12,43 @@ namespace backend.Controllers
     {
         private IBudgetRepository _budgetRepository;
         private IClientRepository _clientRepository;
+        private IAccountRepository _accountRepository;
 
-        public BudgetsController(IBudgetRepository budgetRepository, IClientRepository clientRepository)
+        public BudgetsController(IBudgetRepository budgetRepository, IClientRepository clientRepository, IAccountRepository accountRepository)
         {
             _budgetRepository = budgetRepository;
             _clientRepository = clientRepository;
+            _accountRepository = accountRepository;
         }
 
-        [HttpGet("accounts/{id}/budgets")]
-        public IActionResult Get()
+        [HttpGet("clients/accounts/{id}/budgets")]
+        public IActionResult GetBudgetsByAccount(long id)
         {
             try
             {
-                var bud = _budgetRepository.GetAllBudgets(); //trae todos los budgets
+                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                if (email == string.Empty)
+                    return StatusCode(403, "Cliente no autorizado");
+
+                Client cl = _clientRepository.FindByEmail(email);
+                if (cl == null)
+                    return StatusCode(403, "Cliente no encontrado");
+
+                //var acc = _accountRepository.FindById(id);
+
+                var acc = cl.Accounts.FirstOrDefault(account => account.Id == id);
+                if (acc == null)
+                    return StatusCode(403, "Cuenta invalida");
+
                 var budDTO = new List<BudgetDTO>(); //variable DTO xq no queremos mostrar todos los datos
 
-                foreach (Budget budget in bud)
+                foreach (Budget bud in acc.Budgets)
                 {
                     BudgetDTO budgetDTO = new BudgetDTO()
                     {
-                        Id = budget.Id,
-                        Amount = budget.Amount,
-                        Transactions = budget.Transactions.Select(tr => new TransactionDTO
+                        Id = bud.Id,
+                        Amount = bud.Amount,
+                        Transactions = bud.Transactions.Select(tr => new TransactionDTO
                         {
                             Id = tr.Id,
                             Amount = tr.Amount,
@@ -50,7 +66,7 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("budget/{id}")]
+        [HttpGet("budgets/{id}")]
         public IActionResult Get(long id)
         {
             try
@@ -64,7 +80,7 @@ namespace backend.Controllers
                 {
                     Id = bud.Id,
                     Amount = bud.Amount,
-                    Transactions = budget.Transactions.Select(tr => new TransactionDTO
+                    Transactions = bud.Transactions.Select(tr => new TransactionDTO
                     {
                         Id = tr.Id,
                         Amount = tr.Amount,
@@ -80,7 +96,7 @@ namespace backend.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("budgets")]
         public IActionResult Post([FromBody] Budget budget)
         {
             try
@@ -88,20 +104,34 @@ namespace backend.Controllers
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                 {
-                    return StatusCode(403, "cliente no autorizado");
+                    return StatusCode(403, "Cliente no autorizado");
                 }
 
                 Client cl = _clientRepository.FindByEmail(email);
                 if (cl == null)
                 {
-                    return StatusCode(403, "cliente no encontrado");
+                    return StatusCode(403, "Cliente no encontrado");
                 }
 
                 Budget newBudget = new Budget
                 {
                     Id = budget.Id,
-                    Balance = budget.Balance,
+                    Amount = budget.Amount,
+                    AccountId = budget.AccountId,
+                    CategoryId = budget.CategoryId,
+                    Transactions = new List<Transaction>()
                 };
+
+                _budgetRepository.Save(newBudget);
+
+                BudgetDTO newBudgetDTO = new BudgetDTO
+                {
+                    Id = newBudget.Id,
+                    Amount = newBudget.Amount,
+                    Transactions = new List<TransactionDTO>()
+                };
+
+                return Created("", newBudgetDTO);
             }
             catch (Exception ex) 
             {
