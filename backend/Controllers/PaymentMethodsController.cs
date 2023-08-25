@@ -15,7 +15,7 @@ namespace backend.Controllers
         {
             _paymentMethodRepository = paymentMethodRepository;
         }
-        [HttpGet("paymentmethod")]
+        [HttpGet("paymentmethods")]
         public IActionResult Get()
         {
             try
@@ -24,12 +24,12 @@ namespace backend.Controllers
                 var pmDTO = new List<PaymentMethodDTO>();
                 foreach(PaymentMethod paymentMethod in pm)
                 {
-                    PaymentMethodDTO payMethDTO = new PaymentMethodDTO()
+                    PaymentMethodDTO paymentDTO = new PaymentMethodDTO()
                     {
                         Id = paymentMethod.Id,
                         Description = paymentMethod.Description,
                     };
-                    pmDTO.Add(new PaymentMethodDTO ());
+                    pmDTO.Add(paymentDTO);
                 }
                 return Ok(pmDTO);
             }
@@ -38,7 +38,7 @@ namespace backend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpGet("paymentmethod/{id}")]
+        [HttpGet("paymentmethods/{id}")]
         public IActionResult Get(long id)
         {
             try
