@@ -9,5 +9,6 @@
         public Category? Category { get; set; }
         public long CategoryId { get; set; }
         public ICollection<Transaction>? Transactions { get; set; }
+     
     }
 }
