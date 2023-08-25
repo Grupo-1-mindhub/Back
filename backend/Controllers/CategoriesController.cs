@@ -16,7 +16,7 @@ namespace backend.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        [HttpGet("category")]
+        [HttpGet("categories")]
         public IActionResult Get()
         {
             try
@@ -41,7 +41,7 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("category/{id}")]
+        [HttpGet("categories/{id}")]
         public IActionResult Get(long id) 
         { 
             try
