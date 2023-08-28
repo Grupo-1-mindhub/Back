@@ -1,4 +1,6 @@
-﻿namespace backend.Models
+﻿using backend.Enumerates;
+
+namespace backend.Models
 {
     public class DbInitializer
     {
@@ -99,6 +101,43 @@
                     }
                     context.SaveChanges();
                 }
+            }
+
+            if (context.PaymentMethods.Any())
+            {
+                var paymentMethods = new PaymentMethod[]
+                {
+                    new PaymentMethod {Description = PaymentMethodType.EFECTIVO.ToString() },
+                    new PaymentMethod {Description = PaymentMethodType.DEBITO.ToString() }
+                };
+
+                foreach (var paymentMethod in paymentMethods)
+                {
+                    context.PaymentMethods.Add(paymentMethod);
+                }
+
+                context.SaveChanges();
+
+            }
+
+            if (context.Categories.Any())
+            {
+                var categories = new Category[]
+                {
+                    new Category { Description = CategoryType.GENERAL.ToString() },
+                    new Category { Description = CategoryType.COMIDA.ToString() },
+                    new Category { Description = CategoryType.ENTRETENIMIENTO.ToString() },
+                    new Category { Description = CategoryType.SERVICIOS.ToString() },
+                    new Category { Description = CategoryType.SUPERMERCADO.ToString() },
+                    new Category { Description = CategoryType.TRANSPORTE.ToString() },
+                };
+
+                foreach (var category in categories)
+                {
+                    context.Categories.Add(category);
+                }
+
+                context.SaveChanges();
             }
         }
     }
