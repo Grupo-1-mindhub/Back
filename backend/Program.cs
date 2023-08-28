@@ -53,19 +53,24 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+//ejecuta las migraciones pendientes
+PrepareDb.Population(app);
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-	try
-	{
-		var context = services.GetRequiredService<MyContext>();
-	}
-	catch (Exception ex)
-	{
-		var logger = services.GetRequiredService<ILogger<Program>>();
-		logger.LogError(ex, "Ha ocurrido un error al enviar la info a la base de datos.");
-	}
+    try
+    {
+        var context = services.GetRequiredService<MyContext>();
+        DbInitializer.Initialize(context);
+
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Ha ocurrido un error al enviar la info a la base de datos.");
+    }
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -73,9 +78,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-//ejecuta las migraciones pendientes
-PrepareDb.Population(app);
 
 
 app.UseCors("MyCorsPolicy");

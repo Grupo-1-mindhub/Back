@@ -6,6 +6,43 @@ namespace backend.Models
     {
         public static void Initialize(MyContext context)
         {
+            if (!context.PaymentMethods.Any())
+            {
+                var paymentMethods = new PaymentMethod[]
+                {
+                    new PaymentMethod {Description = PaymentMethodType.EFECTIVO.ToString() },
+                    new PaymentMethod {Description = PaymentMethodType.DEBITO.ToString() }
+                };
+
+                foreach (var paymentMethod in paymentMethods)
+                {
+                    context.PaymentMethods.Add(paymentMethod);
+                }
+
+                context.SaveChanges();
+
+            }
+
+            if (!context.Categories.Any())
+            {
+                var categories = new Category[]
+                {
+                    new Category { Description = CategoryType.GENERAL.ToString() },
+                    new Category { Description = CategoryType.COMIDA.ToString() },
+                    new Category { Description = CategoryType.ENTRETENIMIENTO.ToString() },
+                    new Category { Description = CategoryType.SERVICIOS.ToString() },
+                    new Category { Description = CategoryType.SUPERMERCADO.ToString() },
+                    new Category { Description = CategoryType.TRANSPORTE.ToString() },
+                };
+
+                foreach (var category in categories)
+                {
+                    context.Categories.Add(category);
+                }
+
+                context.SaveChanges();
+            }
+
             if (!context.Clients.Any())
             {
                 var clients = new Client[]
@@ -45,29 +82,35 @@ namespace backend.Models
             if (!context.Budgets.Any())
             {
                 var account1 = context.Accounts.FirstOrDefault(c => c.Number == "001");
+                var category = context.Categories.FirstOrDefault(c => c.Id == 1);
                 if (account1 != null)
                 {
                     var budgets = new Budget[]
                     {
-                        new Budget {AccountId= account1.Id, Amount = 5000},
-                        new Budget {AccountId= account1.Id, Amount = 1500}
+                        new Budget { Amount = 5000, AccountId = account1.Id, CategoryId = category.Id },
+                        new Budget { Amount = 1500, AccountId = account1.Id, CategoryId = category.Id }
                     };
+
                     foreach (Budget budget in budgets)
                     {
                         context.Budgets.Add(budget);
                     }
+
                     context.SaveChanges();
                 }
             }
 
-            if (context.Transactions.Any())
+            if (!context.Transactions.Any())
             {
                 var account1 = context.Accounts.FirstOrDefault(c => c.Number == "001");
+                var paymentMethod = context.PaymentMethods.FirstOrDefault(c => c.Id == 1);
                 if (account1 != null)
                 {
                     var transactions = new Transaction[]
                     {
-                        new Transaction { BudgetId = account1.Id, Amount = 2000, CreationDate = DateTime.Now, Description = "Nafta" }
+                        new Transaction { PaymentMethodId = paymentMethod.Id, BudgetId = account1.Id, Amount = 2000, CreationDate = DateTime.Now, Description = "Nafta" },
+                        new Transaction { PaymentMethodId = paymentMethod.Id, BudgetId = account1.Id, Amount = 1500, CreationDate = DateTime.Now, Description = "Gasoil" },
+                        new Transaction { PaymentMethodId = paymentMethod.Id, BudgetId = account1.Id, Amount = 5000, CreationDate = DateTime.Now, Description = "Aceite" },
                     };
                     foreach (Transaction transaction in transactions)
                     {
@@ -101,43 +144,6 @@ namespace backend.Models
                     }
                     context.SaveChanges();
                 }
-            }
-
-            if (context.PaymentMethods.Any())
-            {
-                var paymentMethods = new PaymentMethod[]
-                {
-                    new PaymentMethod {Description = PaymentMethodType.EFECTIVO.ToString() },
-                    new PaymentMethod {Description = PaymentMethodType.DEBITO.ToString() }
-                };
-
-                foreach (var paymentMethod in paymentMethods)
-                {
-                    context.PaymentMethods.Add(paymentMethod);
-                }
-
-                context.SaveChanges();
-
-            }
-
-            if (context.Categories.Any())
-            {
-                var categories = new Category[]
-                {
-                    new Category { Description = CategoryType.GENERAL.ToString() },
-                    new Category { Description = CategoryType.COMIDA.ToString() },
-                    new Category { Description = CategoryType.ENTRETENIMIENTO.ToString() },
-                    new Category { Description = CategoryType.SERVICIOS.ToString() },
-                    new Category { Description = CategoryType.SUPERMERCADO.ToString() },
-                    new Category { Description = CategoryType.TRANSPORTE.ToString() },
-                };
-
-                foreach (var category in categories)
-                {
-                    context.Categories.Add(category);
-                }
-
-                context.SaveChanges();
             }
         }
     }
