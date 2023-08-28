@@ -65,7 +65,7 @@
                 {
                     var transactions = new Transaction[]
                     {
-                        new Transaction { BudgetId = account1.Id, Amount = 2000, CreationDate = DateTime.Now, Description = "Viaje" }
+                        new Transaction { BudgetId = account1.Id, Amount = 2000, CreationDate = DateTime.Now, Description = "Nafta" }
                     };
                     foreach (Transaction transaction in transactions)
                     {
@@ -74,6 +74,31 @@
                     context.SaveChanges();
                 }
 
+            }
+            
+            if (!context.Cards.Any())
+            {
+                //buscamos al cliente 
+                var client1 = context.Clients.FirstOrDefault(c => c.Email == "juanp@hotmail.com");
+                if (client1 != null)
+                {
+                    //le agregamos 1 tarjeta de DEBITO
+                    var cards = new Card[]
+                    {
+                        new Card {
+                            ClientId= client1.Id,
+                            Type = CardType.DEBIT.ToString(),
+                            Number = "3325-6745-7876-4445",
+                            Deadline= DateTime.Now.AddYears(4),
+                        },
+                    };
+
+                    foreach (Card card in cards)
+                    {
+                        context.Cards.Add(card);
+                    }
+                    context.SaveChanges();
+                }
             }
         }
     }
