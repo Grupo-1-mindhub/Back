@@ -1,8 +1,11 @@
 ﻿using backend.DTOs;
 using backend.Models;
 using backend.Repositories;
+using backend.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -12,11 +15,13 @@ namespace backend.Controllers
     {
         private IClientRepository _clientRepository;
         private IAccountRepository _accountRepository;
+        private ITokenServices _tokenServices;
 
-        public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository)
+        public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository, ITokenServices tokenServices)
         { 
             _clientRepository = clientRepository;
             _accountRepository = accountRepository;
+            _tokenServices = tokenServices;
         }
 
         [HttpGet] //cuando hagamos un peticion de tipo get al controlador va a responder con el sgte metodo
@@ -101,9 +106,9 @@ namespace backend.Controllers
         {
             try
             {
-                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty; //traemos el mail de la base de datos 
-                                                                                                                 //este USER proviene del sistema de autenticacion que tenemos para manejar en Back, llamamos un objeto especial que tiene la info de un cliente como usuario de nuestro Back 
-                
+                var email= HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                                                                                                        
+
                 if (email == string.Empty)
                 {
                     return StatusCode(401, "Unauthorized");

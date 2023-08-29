@@ -12,11 +12,12 @@ namespace backend.Services
         {
             _configuration = configuration;
         }
-        public string GenerateToken(string username)
+
+        public string GenerateToken(string email)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Email, email),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:key").Value));

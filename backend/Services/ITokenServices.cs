@@ -3,5 +3,6 @@
     public interface ITokenServices
     {
         string GenerateToken(string email);
+
     }
 }

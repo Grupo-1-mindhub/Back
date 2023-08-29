@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using backend.Services;
+using backend.DTOs;
 
 namespace backend.Controllers
 {
@@ -24,7 +25,7 @@ namespace backend.Controllers
             }
 
             [HttpPost("login")]
-            public IActionResult Login([FromBody] Client client)
+            public IActionResult Login([FromBody] LoginDTO client)
             {
                 try
                 {
