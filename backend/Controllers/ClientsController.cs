@@ -104,7 +104,7 @@ namespace backend.Controllers
 
                 if (email == string.Empty)
                 {
-                    return Forbid();
+                    return StatusCode(401, "Unauthorized");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);

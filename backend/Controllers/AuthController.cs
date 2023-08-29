@@ -28,9 +28,9 @@ namespace backend.Controllers
                         return Unauthorized();
 
                     var claims = new List<Claim>
-                {
-                    new Claim("Client", user.Email),
-                };
+                    {
+                        new Claim("Client", user.Email),
+                    };
 
                     var claimsIdentity = new ClaimsIdentity(
                         claims,
