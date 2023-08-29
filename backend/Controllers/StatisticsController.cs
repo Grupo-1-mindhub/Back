@@ -71,7 +71,9 @@ namespace backend.Controllers
                     }
                 }
 
-             }
+                return Ok();
+            }
+
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
