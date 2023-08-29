@@ -4,6 +4,7 @@ using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -75,7 +76,7 @@ namespace backend.Controllers
         {
             try
             {
-                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
                 if (email == string.Empty)
                 {
                     return StatusCode(403, "cliente no autorizado");
@@ -117,7 +118,7 @@ namespace backend.Controllers
         {
             try
             {
-                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
                 if (email == string.Empty)
                 {
                     return StatusCode(403, "cliente no autorizado");

@@ -9,7 +9,6 @@ namespace backend.Controllers
 {
     [Route("api/")]
     [ApiController]
-    [Authorize]
     public class PaymentMethodsController : ControllerBase
     {
         private IPaymentMethodRepository _paymentMethodRepository;

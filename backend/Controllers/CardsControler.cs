@@ -3,7 +3,7 @@ using backend.Models;
 using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -25,7 +25,7 @@ namespace backend.Controllers
         {
             try
             {
-                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
                 if (email == string.Empty)
                 {
                     return Forbid();
@@ -61,7 +61,7 @@ namespace backend.Controllers
         {
             try
             {
-                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
                 if (email == string.Empty)
                 {
                     return Forbid();
