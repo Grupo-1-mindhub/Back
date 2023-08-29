@@ -1,8 +1,6 @@
 ﻿using backend.DTOs;
 using backend.Models;
 using backend.Repositories;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -19,7 +17,6 @@ namespace backend.Controllers
             _clientRepository = clientRepository;
         }
         [HttpGet("clients/accounts/{id}/statistics")]
-        [Authorize] // Requiere autenticación
         public IActionResult GetBudgetsByAccount(long id)
         {
             try
@@ -42,34 +39,7 @@ namespace backend.Controllers
                     return StatusCode(403, "Cuenta inválida");
                 }
                 var budgets = acc.Budgets;
-                var incomeMonths =new List<MonthDTO>();
-                var expenseMonths = new List<MonthDTO>();
-                foreach (Budget bud in budgets)
-                {
-                    var transactions = bud.Transactions;
-                    var incomeTotal = transactions.Where(tr => tr.Amount > 0).Sum(tr => tr.Amount);
-                    var expenseTotal = transactions.Where(tr => tr.Amount < 0).Sum(tr => tr.Amount);
-                    var monthsWithTransactions = transactions
-                        .GroupBy(tr => new { tr.CreationDate.Month, tr.CreationDate.Year })
-                        .Select(group => new MonthDTO
-                        {
-                            Amount = group.Sum(tr => tr.Amount),
-                            Month = (MonthsType)group.Key.Month,
-                            Year = group.Key.Year
-                        })
-                        .ToList();
-                    foreach (var month in monthsWithTransactions)
-                    {
-                        if (month.Amount > 0)
-                        {
-                            incomeMonths.Add(month);
-                        }
-                        else if (month.Amount < 0)
-                        {
-                            expenseMonths.Add(month);
-                        }
-                    }
-                }
+                
 
                 return Ok();
             }
