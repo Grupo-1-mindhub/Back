@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace backend.Migrations
 {
-    public partial class AccountsControllerCreated : Migration
+    public partial class addNewProjectStructure : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -97,33 +97,6 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Budgets",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<double>(type: "float", nullable: false),
-                    AccountId = table.Column<long>(type: "bigint", nullable: false),
-                    CategoryId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Budgets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Budgets_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Budgets_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
@@ -132,16 +105,23 @@ namespace backend.Migrations
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BudgetId = table.Column<long>(type: "bigint", nullable: false),
+                    AccountId = table.Column<long>(type: "bigint", nullable: false),
+                    CategoryId = table.Column<long>(type: "bigint", nullable: false),
                     PaymentMethodId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Budgets_BudgetId",
-                        column: x => x.BudgetId,
-                        principalTable: "Budgets",
+                        name: "FK_Transactions_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -158,24 +138,19 @@ namespace backend.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Budgets_AccountId",
-                table: "Budgets",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Budgets_CategoryId",
-                table: "Budgets",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cards_ClientId",
                 table: "Cards",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_BudgetId",
+                name: "IX_Transactions_AccountId",
                 table: "Transactions",
-                column: "BudgetId");
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_CategoryId",
+                table: "Transactions",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_PaymentMethodId",
@@ -192,16 +167,13 @@ namespace backend.Migrations
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Budgets");
-
-            migrationBuilder.DropTable(
-                name: "PaymentMethods");
-
-            migrationBuilder.DropTable(
                 name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethods");
 
             migrationBuilder.DropTable(
                 name: "Clients");

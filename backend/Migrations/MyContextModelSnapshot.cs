@@ -52,32 +52,6 @@ namespace backend.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("backend.Models.Budget", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<long>("AccountId")
-                        .HasColumnType("bigint");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<long>("CategoryId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Budgets");
-                });
-
             modelBuilder.Entity("backend.Models.Card", b =>
                 {
                     b.Property<long>("Id")
@@ -170,10 +144,13 @@ namespace backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint");
+
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<long>("BudgetId")
+                    b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreationDate")
@@ -187,7 +164,9 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BudgetId");
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("PaymentMethodId");
 
@@ -205,25 +184,6 @@ namespace backend.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("backend.Models.Budget", b =>
-                {
-                    b.HasOne("backend.Models.Account", "Account")
-                        .WithMany("Budgets")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("backend.Models.Category", "Category")
-                        .WithMany("Budgets")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("backend.Models.Card", b =>
                 {
                     b.HasOne("backend.Models.Client", "Client")
@@ -237,9 +197,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Transaction", b =>
                 {
-                    b.HasOne("backend.Models.Budget", "Budget")
+                    b.HasOne("backend.Models.Account", "Account")
                         .WithMany("Transactions")
-                        .HasForeignKey("BudgetId")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Category", "Category")
+                        .WithMany("Transactions")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -249,24 +215,21 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Budget");
+                    b.Navigation("Account");
+
+                    b.Navigation("Category");
 
                     b.Navigation("PaymentMethod");
                 });
 
             modelBuilder.Entity("backend.Models.Account", b =>
                 {
-                    b.Navigation("Budgets");
-                });
-
-            modelBuilder.Entity("backend.Models.Budget", b =>
-                {
                     b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("backend.Models.Category", b =>
                 {
-                    b.Navigation("Budgets");
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("backend.Models.Client", b =>

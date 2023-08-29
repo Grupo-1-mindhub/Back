@@ -93,16 +93,13 @@ namespace backend.Controllers
                         Description = acc.Description,
                         CreationDate = acc.CreationDate,
                         Balance = acc.Balance,
-                      
-                    Transactions = acc.Transactions.Select(y => new TransactionDTO
-                    {
-                        Id = y.Id,
-                        Amount = y.Amount,
-                        Description = y.Description,
-                        CreationDate = y.CreationDate
-                    }).ToList(),
-
-                     
+                        Transactions = acc.Transactions.Select(y => new TransactionDTO
+                        {
+                            Id = y.Id,
+                            Amount = y.Amount,
+                            Description = y.Description,
+                            CreationDate = y.CreationDate
+                        }).ToList()
                     };
                     accDTO.Add(newAccDTO);
                 }

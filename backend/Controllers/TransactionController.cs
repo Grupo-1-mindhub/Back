@@ -90,22 +90,21 @@ namespace backend.Controllers
 
 
                 Account updatedAccount = new Account
-             {
+                {
                     Id = account.Id,
                     Number = account.Number,
                     Description = account.Description,
                     Balance = account.Balance + transaction.Amount * -1,
                     CreationDate = account.CreationDate,
                     ClientId = account.ClientId,
-                        Transactions = account.Transactions.Select(tr => new Transaction
-                        {
-                            Id = tr.Id,
-                            Amount = tr.Amount,
-                            Description = tr.Description,
-                            CreationDate = tr.CreationDate,
-                        }).ToList()
-
-            };
+                    Transactions = account.Transactions.Select(tr => new Transaction
+                    {
+                        Id = tr.Id,
+                        Amount = tr.Amount,
+                        Description = tr.Description,
+                        CreationDate = tr.CreationDate,
+                    }).ToList()
+                };
 
                 _accountRepository.Save(updatedAccount);
 
