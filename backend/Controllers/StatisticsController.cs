@@ -11,14 +11,14 @@ namespace backend.Controllers
     [ApiController]
     public class StatisticsController : ControllerBase
     {
-        private IAccountRepository _accountRepository;
+  
         private IClientRepository _clientRepository;
-        public StatisticsController(IAccountRepository accountRepository, IClientRepository clientRepository)
+        public StatisticsController( IClientRepository clientRepository)
         {
-            _accountRepository = accountRepository;
+   
             _clientRepository = clientRepository;
         }
-        [HttpGet("clients/accounts/{id}/budgets")]
+        [HttpGet("clients/accounts/{id}/statistics")]
         [Authorize] // Requiere autenticación
         public IActionResult GetBudgetsByAccount(long id)
         {
