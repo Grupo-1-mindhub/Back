@@ -16,38 +16,77 @@ namespace backend.Controllers
    
             _clientRepository = clientRepository;
         }
-        [HttpGet("clients/accounts/{id}/statistics")]
-        public IActionResult GetBudgetsByAccount(long id)
-        {
-            try
-            {
-                string email = User.FindFirst("Client")?.Value;
-                if (string.IsNullOrEmpty(email))
-                {
-                    return StatusCode(403, "Cliente no autorizado");
-                }
+       // [HttpGet("clients/accounts/{id}/statistics")]
+        //public IActionResult GetBudgetsByAccount(long id)
+        //{
+        //    try
+        //    {
 
-                Client cl = _clientRepository.FindByEmail(email);
-                if (cl == null)
-                {
-                    return StatusCode(403, "Cliente no encontrado");
-                }
+        //        //Client cl = _clientRepository.FindById(id);
+        //        //if (cl == null)
+        //        //{
+        //        //    return StatusCode(403, "Cliente no encontrado");
+        //        //}
 
-                var acc = cl.Accounts.FirstOrDefault(account => account.Id == id);
-                if (acc == null)
-                {
-                    return StatusCode(403, "Cuenta inválida");
-                }
-                var budgets = acc.Budgets;
+        //        //var accs = cl.Accounts;
+        //        //if (accs== null)
+        //        //    return StatusCode(403, "El cliente no tiene cuentas");
+
+        //        //var buds = new List<Budget>();
                 
+        //        //foreach (Account acc in accs)
+        //        //{
 
-                return Ok();
-            }
+        //        //    foreach (Budget budget in acc.Budgets) 
+        //        //    { 
+        //        //        buds.Add(budget);
+        //        //    }
+        //        //}
 
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+        //        //    var allTransactions = new List<TransactionDTO>();
+
+        //        //foreach (Budget bud in budgets)
+        //        //{
+        //        //    allTransactions.AddRange((IEnumerable<TransactionDTO>)bud.Transactions);
+        //        //}
+        //        ////var transactionsByMonthAndYear = allTransactions
+        //        //            .GroupBy(tr => new { tr.CreationDate.Year, tr.CreationDate.Month })
+        //        //            .ToDictionary(
+        //        //                group => $"{group.Key.Year}-{group.Key.Month}",
+        //        //                group => group.Select(tr => new TransactionDTO
+        //        //                {
+        //        //                    Id = tr.Id,
+        //        //                    Amount = tr.Amount,
+        //        //                    Description = tr.Description,
+        //        //                    CreationDate = tr.CreationDate
+        //        //                }).ToList()
+        //        //            );
+
+        //        //var monthsWithTransactions = transactionsByMonthAndYear.Keys.Select(key =>
+        //        //{
+        //        //    var parts = key.Split('-');
+        //        //    return new MonthDTO
+        //        //    {
+        //        //        Year = int.Parse(parts[0]),
+        //        //        Month = (MonthsType)int.Parse(parts[1]),
+        //        //        Amount = transactionsByMonthAndYear[key].Sum(tr => tr.Amount)
+        //        //    };
+        //        //}).ToList();
+
+
+
+        //        //return Ok(monthsWithTransactions);
+
+
+
+        //        //  return Ok(allTransactions);
+        //    //    return Ok(buds);
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message);
+        //    }
+        //}
     }
 }

@@ -79,38 +79,20 @@ namespace backend.Models
                 context.SaveChanges();
             }
 
-            if (!context.Budgets.Any())
-            {
-                var account1 = context.Accounts.FirstOrDefault(c => c.Number == "001");
-                var category = context.Categories.FirstOrDefault(c => c.Id == 1);
-                if (account1 != null)
-                {
-                    var budgets = new Budget[]
-                    {
-                        new Budget { Amount = 5000, AccountId = account1.Id, CategoryId = category.Id },
-                        new Budget { Amount = 1500, AccountId = account1.Id, CategoryId = category.Id }
-                    };
-
-                    foreach (Budget budget in budgets)
-                    {
-                        context.Budgets.Add(budget);
-                    }
-
-                    context.SaveChanges();
-                }
-            }
+           
 
             if (!context.Transactions.Any())
             {
                 var account1 = context.Accounts.FirstOrDefault(c => c.Number == "001");
                 var paymentMethod = context.PaymentMethods.FirstOrDefault(c => c.Id == 1);
+                var category= context.Categories.FirstOrDefault(c => c.Id == 1);
                 if (account1 != null)
                 {
                     var transactions = new Transaction[]
                     {
-                        new Transaction { PaymentMethodId = paymentMethod.Id, BudgetId = account1.Id, Amount = 2000, CreationDate = DateTime.Now, Description = "Nafta" },
-                        new Transaction { PaymentMethodId = paymentMethod.Id, BudgetId = account1.Id, Amount = 1500, CreationDate = DateTime.Now, Description = "Gasoil" },
-                        new Transaction { PaymentMethodId = paymentMethod.Id, BudgetId = account1.Id, Amount = 5000, CreationDate = DateTime.Now, Description = "Aceite" },
+                        new Transaction { CategoryId=category.Id,PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = 2000, CreationDate = DateTime.Now, Description = "Nafta" },
+                        new Transaction { CategoryId=category.Id,PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = 1500, CreationDate = DateTime.Now, Description = "Gasoil" },
+                        new Transaction { CategoryId=category.Id,PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = 5000, CreationDate = DateTime.Now, Description = "Aceite" },
                     };
                     foreach (Transaction transaction in transactions)
                     {

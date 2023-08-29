@@ -20,7 +20,7 @@ namespace backend.Repositories
         public IEnumerable<Category> GetAllCategorys()
         {
             return FindAll()
-              .Include(category => category.Budgets)
+              .Include(category => category.Transactions)
               .ToList();
         }
 

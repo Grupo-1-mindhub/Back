@@ -15,8 +15,7 @@ namespace backend.Repositories
         {
             return FindByCondition(client => client.Email.ToUpper() == email.ToUpper()) 
             .Include(client => client.Accounts)
-                .ThenInclude(account => account.Budgets)
-                    .ThenInclude(budget => budget.Transactions)
+                    .ThenInclude(acc => acc.Transactions)
             .Include(client => client.Cards)
                 .FirstOrDefault();
         }
@@ -24,7 +23,10 @@ namespace backend.Repositories
         public Client FindById(long id)
         {
             return FindByCondition(client => client.Id == id)
-               .FirstOrDefault();
+               .Include(client => client.Accounts)
+                    .ThenInclude(acc => acc.Transactions)
+            .Include(client => client.Cards)
+                .FirstOrDefault();
         }
 
         public IEnumerable<Client> GetAllClients()

@@ -14,15 +14,14 @@ namespace backend.Repositories
 
         public Account FindById(long id)
         {
-            return FindByCondition(account => account.Id == id)
-                .Include(account => account.Budgets)
-                    .ThenInclude(budget => budget.Transactions)
+            return FindByCondition(account => account.Id == id)              
+                 .Include(account => account.Transactions)
                 .FirstOrDefault();
         }
         public IEnumerable<Account> GetAllAccounts()
         {
             return FindAll()
-                .Include(account => account.Budgets)
+                .Include(account => account.Transactions)
                 .ToList();
         }
 
@@ -42,13 +41,13 @@ namespace backend.Repositories
         public IEnumerable<Account> GetAccountsByClient(long clientId)
         {
             return FindByCondition(account => account.ClientId == clientId)
-            .Include(account => account.Budgets)
+            .Include(account => account.Transactions)
             .ToList();
         }
         public Account FindByNumber(string number)
         {
             return FindByCondition(account => account.Number.ToUpper() == number.ToUpper())
-            .Include(account => account.Budgets)
+            .Include(account => account.Transactions)
             .FirstOrDefault();
         }
     }
