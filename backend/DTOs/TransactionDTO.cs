@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Eventing.Reader;
+﻿using backend.Enumerates;
+using System.Diagnostics.Eventing.Reader;
 
 namespace backend.DTOs
 {
@@ -7,6 +8,7 @@ namespace backend.DTOs
         public long Id { get; set; }
         public double Amount { get; set; }  
         public string Description { get; set; }
+        public string Category { get; set; }
         public DateTime CreationDate { get; set; }
 
     }

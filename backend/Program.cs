@@ -1,6 +1,7 @@
 using backend.Models;
 using backend.Repositories;
 using backend.Services;
+using HomeBanking.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +57,12 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+
+
+
+
 builder.Services.AddScoped<ITokenServices, TokenServices>();
 //Esto se usa para sacar el string connection de appsettings.json
 //builder.Services.AddDbContext<MyContext>(options => 

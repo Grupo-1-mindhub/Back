@@ -14,14 +14,15 @@ namespace backend.Controllers
         private ITransactionRepository _transactionRepository;
         private IClientRepository _clientRepository;
         private IAccountRepository _accountRepository;
+        private ICategoryRepository _categoryRepository;
       
 
-        public TransactionController(ITransactionRepository transactionRepository, IClientRepository clientRepository, IAccountRepository accountRepository)
+        public TransactionController(ITransactionRepository transactionRepository, IClientRepository clientRepository, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             _transactionRepository = transactionRepository;
             _clientRepository = clientRepository;
             _accountRepository = accountRepository;
-    
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet("transactions")]
@@ -33,12 +34,15 @@ namespace backend.Controllers
                 var transactionDTO = new List<TransactionDTO>();
                 foreach (var transaction in tran)
                 {
+                    var categoryid = transaction.CategoryId;
+                    Category category = _categoryRepository.FindById(categoryid);
                     var newTransactionDTO = new TransactionDTO
                     {
-                        //Id = transaction.Id,
+                        Id = transaction.Id,
                         Amount = transaction.Amount,
                         Description = transaction.Description,
-                        CreationDate = transaction.CreationDate
+                        CreationDate = transaction.CreationDate,
+                        Category=category.Description
                     };
                     transactionDTO.Add(newTransactionDTO);
                 }
