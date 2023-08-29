@@ -51,8 +51,8 @@ namespace backend.Models
                     {
                         FirstName = "Juan",
                         LastName = "Perez",
-                        Password = "Juan123",
-                        Email = "juanp@hotmail.com"
+                        Password = "test",
+                        Email = "test"
                     }
                 };
                 foreach (Client client in clients)
@@ -64,7 +64,7 @@ namespace backend.Models
 
             if (!context.Accounts.Any())
             {
-                var clientJuan = context.Clients.FirstOrDefault(c => c.Email == "juanp@hotmail.com");
+                var clientJuan = context.Clients.FirstOrDefault(c => c.Email == "test");
                 if (clientJuan != null)
                 {
                     var accounts = new Account[]
@@ -122,7 +122,7 @@ namespace backend.Models
             if (!context.Cards.Any())
             {
                 //buscamos al cliente 
-                var client1 = context.Clients.FirstOrDefault(c => c.Email == "juanp@hotmail.com");
+                var client1 = context.Clients.FirstOrDefault(c => c.Email == "test");
                 if (client1 != null)
                 {
                     //le agregamos 1 tarjeta de DEBITO
