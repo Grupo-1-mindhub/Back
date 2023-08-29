@@ -57,7 +57,7 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, TokenServices>();
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
