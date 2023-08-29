@@ -1,6 +1,7 @@
 using backend.Helpers;
 using backend.Models;
 using backend.Repositories;
+using backend.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Validations;
@@ -27,31 +28,7 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
-//Esto se usa para sacar el string connection de appsettings.json
-//builder.Services.AddDbContext<MyContext>(options => 
-//options.UseSqlServer(builder.Configuration.GetConnectionString("MyDBConnectionNet6"))); 
-
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//            .AddCookie(options =>
-//            {
-//                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-//                options.LoginPath = new PathString("/index.html");
-//            });
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
-//});
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("MyCorsPolicy", builder =>
-//    {
-//        builder.AllowAnyOrigin()
-//        .AllowAnyMethod()
-//        .AllowAnyHeader();
-//    });
-//});
-
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
