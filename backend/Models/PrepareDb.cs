@@ -11,7 +11,9 @@ namespace backend.Models
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                SeedData(serviceScope.ServiceProvider.GetService<MyContext>());
+                var context = serviceScope.ServiceProvider.GetService<MyContext>();
+                SeedData(context);
+                DbInitializer.Initialize(context);
             }
         }
 

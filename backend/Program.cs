@@ -1,8 +1,13 @@
 using backend.Models;
 using backend.Repositories;
+using backend.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Validations;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +16,34 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Auhtorization",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type= ReferenceType.SecurityScheme,
+                    Id="Bearer",
+                }
+            },
+            new string[] {}
+        }
+    });
+
+});
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
@@ -24,20 +56,10 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
+builder.Services.AddScoped<ITokenServices, TokenServices>();
 //Esto se usa para sacar el string connection de appsettings.json
 //builder.Services.AddDbContext<MyContext>(options => 
 //options.UseSqlServer(builder.Configuration.GetConnectionString("MyDBConnectionNet6"))); 
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-                options.LoginPath = new PathString("/index.html");
-            });
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
-});
 
 builder.Services.AddCors(options =>
 {
@@ -49,28 +71,23 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JWT:key").Value)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
+
 
 var app = builder.Build();
 
-//ejecuta las migraciones pendientes
+//Ejecuta las migraciones pendientes y ejecuta el DbInitializer
 PrepareDb.Population(app);
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    try
-    {
-        var context = services.GetRequiredService<MyContext>();
-        DbInitializer.Initialize(context);
-
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Ha ocurrido un error al enviar la info a la base de datos.");
-    }
-}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -78,22 +95,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseCors("MyCorsPolicy");
-
-//app.UseRouting();
-
-app.UseAuthorization();
 app.UseAuthentication();
-
-
+app.UseAuthorization();
 app.UseStaticFiles();
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllers();
-//});
-
-
 app.MapControllers();
 
 app.Run();

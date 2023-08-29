@@ -1,6 +1,7 @@
 ﻿using backend.DTOs;
 using backend.Models;
 using backend.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -94,14 +95,15 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("current")] //nos trae nuestra info en base a los datos que proporcionemos (mail y contraseña)
+        [HttpGet("current")]
+        [Authorize]
         public IActionResult GetCurrent()
         {
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty; //traemos el mail de la base de datos 
                                                                                                                  //este USER proviene del sistema de autenticacion que tenemos para manejar en Back, llamamos un objeto especial que tiene la info de un cliente como usuario de nuestro Back 
-
+                
                 if (email == string.Empty)
                 {
                     return StatusCode(401, "Unauthorized");

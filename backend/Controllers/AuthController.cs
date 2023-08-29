@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using backend.Services;
 
 namespace backend.Controllers
 {
@@ -13,13 +14,17 @@ namespace backend.Controllers
     public class AuthController : Controller
     {
             private IClientRepository _clientRepository;
-            public AuthController(IClientRepository clientRepository)
+            private readonly ITokenServices _tokenServices;
+
+            public AuthController(IClientRepository clientRepository, ITokenServices tokenServices)
             {
                 _clientRepository = clientRepository;
+                _tokenServices = tokenServices;
+                
             }
 
             [HttpPost("login")]
-            public async Task<IActionResult> Login([FromBody] Client client)
+            public IActionResult Login([FromBody] Client client)
             {
                 try
                 {
@@ -27,21 +32,8 @@ namespace backend.Controllers
                     if (user == null || !String.Equals(user.Password, client.Password))
                         return Unauthorized();
 
-                    var claims = new List<Claim>
-                    {
-                        new Claim("Client", user.Email),
-                    };
-
-                    var claimsIdentity = new ClaimsIdentity(
-                        claims,
-                        CookieAuthenticationDefaults.AuthenticationScheme
-                        );
-
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity));
-
-                    return Ok();
+                    string jwtToken = _tokenServices.GenerateToken(client.Email);
+                    return Ok(new { token = jwtToken });
 
                 }
                 catch (Exception ex)
