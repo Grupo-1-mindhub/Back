@@ -2,6 +2,7 @@
 using backend.Models;
 using backend.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace backend.Controllers
 {
@@ -34,18 +35,53 @@ namespace backend.Controllers
 
 
 
-                var trans = new List<Transaction>();
+                var trans = new List<TransactionDTO>();
                 foreach (Account acc in accs)
                 {
                     foreach (Transaction trs in acc.Transactions)
                     {
-                        trans.Add(trs);
+                        var transactionDTO = new TransactionDTO
+                        {
+                            Id = trs.Id,
+                            Amount = trs.Amount,
+                            Description = trs.Description,
+                            CreationDate = trs.CreationDate 
+                        };
+                        trans.Add(transactionDTO);
                     }
                     
                 }
+                var positiveTransactions = trans.Where(tr => tr.Amount > 0).ToList();
+                var negativeTransactions = trans.Where(tr => tr.Amount < 0).ToList();
 
-        
-                return Ok(trans);
+                var positiveTransactionsByMonth = positiveTransactions
+                         .GroupBy(tr => new { tr.CreationDate.Year, tr.CreationDate.Month })
+                         .Select(group => new MonthDTO
+                         {
+                             Year = group.Key.Year,
+                             Month = (MonthsType)group.Key.Month,
+                             Amount = group.Sum(tr => tr.Amount)
+                         })
+                         .ToList();
+
+                var negativeTransactionsByMonth = negativeTransactions
+                        .GroupBy(tr => new { tr.CreationDate.Year, tr.CreationDate.Month })
+                        .Select(group => new MonthDTO
+                        {
+                            Year = group.Key.Year,
+                            Month = (MonthsType)group.Key.Month,
+                            Amount = group.Sum(tr => tr.Amount)
+                        })
+                        .ToList();
+
+
+
+
+                return Ok(new
+                {
+                    positiveTransactionsByMonth,
+                    negativeTransactionsByMonth
+                });
             }
 
             catch (Exception ex)
