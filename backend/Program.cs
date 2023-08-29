@@ -1,10 +1,13 @@
+using backend.Helpers;
 using backend.Models;
 using backend.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Validations;
 
+
 var builder = WebApplication.CreateBuilder(args);
+// Define el número de puerto que deseas utilizar
 
 // Add services to the container.
 
@@ -28,27 +31,30 @@ builder.Services.AddScoped<ICardRepository, CardRepository>();
 //builder.Services.AddDbContext<MyContext>(options => 
 //options.UseSqlServer(builder.Configuration.GetConnectionString("MyDBConnectionNet6"))); 
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-                options.LoginPath = new PathString("/index.html");
-            });
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
-});
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//            .AddCookie(options =>
+//            {
+//                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+//                options.LoginPath = new PathString("/index.html");
+//            });
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("ClientOnly", policy => policy.RequireClaim("Client"));
+//});
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MyCorsPolicy", builder =>
-    {
-        builder.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-    });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("MyCorsPolicy", builder =>
+//    {
+//        builder.AllowAnyOrigin()
+//        .AllowAnyMethod()
+//        .AllowAnyHeader();
+//    });
+//});
 
+builder.Services.AddCors();
+builder.Services.AddControllers();
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 var app = builder.Build();
 
@@ -78,22 +84,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-app.UseCors("MyCorsPolicy");
-
-//app.UseRouting();
-
-app.UseAuthorization();
-app.UseAuthentication();
-
-
-app.UseStaticFiles();
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllers();
-//});
-
-
+app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
+app.UseStaticFiles();
+
 
 app.Run();
