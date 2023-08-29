@@ -80,14 +80,15 @@ if (app.Environment.IsDevelopment())
 }
 
 
+app.UseCors("MyCorsPolicy");
 
 //app.UseRouting();
 
 app.UseAuthorization();
 app.UseAuthentication();
 
-app.UseCors("MyCorsPolicy");
 
+app.UseStaticFiles();
 //app.UseEndpoints(endpoints =>
 //{
 //    endpoints.MapControllers();
