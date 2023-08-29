@@ -1,12 +1,14 @@
 ﻿using backend.DTOs;
 using backend.Models;
 using backend.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
     [Route("api/")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : Controller
     {
         private ICategoryRepository _categoryRepository;

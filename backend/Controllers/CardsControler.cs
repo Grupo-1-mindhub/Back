@@ -1,6 +1,7 @@
 ﻿using backend.DTOs;
 using backend.Models;
 using backend.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -8,6 +9,7 @@ namespace backend.Controllers
 {
     [Route("api/")]
     [ApiController]
+    [Authorize]
     public class CardsControler : ControllerBase
     {
         private ICardRepository _cardRepository;
