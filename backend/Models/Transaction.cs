@@ -12,5 +12,6 @@
         public long CategoryId { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
         public long PaymentMethodId { get; set; }
+        public string? State { get; set; }
     }
 }

@@ -47,7 +47,8 @@ namespace backend.Controllers
                             Balance = ac.Balance,
                             Description = ac.Description,
                             CreationDate = ac.CreationDate,
-                            Number = ac.Number
+                            Number = ac.Number,
+                            State = ac.State,
                         }).ToList(),
                     };
                     clientsDTO.Add(newClientDTO);
@@ -81,14 +82,16 @@ namespace backend.Controllers
                         Balance = ac.Balance,
                         Description = ac.Description,
                         CreationDate = ac.CreationDate,
-                        Number = ac.Number
+                        Number = ac.Number,
+                        State = ac.State,
                     }).ToList(),
                     Cards = client.Cards.Select(c => new CardDTO
                     {
                         Id = c.Id,
                         DeadLine = c.Deadline,
                         Number = c.Number,
-                        Type = c.Type
+                        Type = c.Type,
+                        State = c.State,
                     }).ToList(),
 
                 };
@@ -133,14 +136,16 @@ namespace backend.Controllers
                         Balance = ac.Balance,
                         Description = ac.Description,
                         CreationDate = ac.CreationDate,
-                        Number = ac.Number
+                        Number = ac.Number,
+                        State = ac.State,
                     }).ToList(),
                     Cards = client.Cards.Select(c => new CardDTO
                     {
                         Id = c.Id,
                         DeadLine = c.Deadline,
                         Number = c.Number,
-                        Type = c.Type
+                        Type = c.Type,
+                        State = c.State,
                     }).ToList()
 
                 };
