@@ -11,6 +11,7 @@ namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClientsController : Controller
     {
         private IClientRepository _clientRepository;
@@ -107,15 +108,12 @@ namespace backend.Controllers
             try
             {
                 var email= HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
-                                                                                                        
-
                 if (email == string.Empty)
                 {
                     return StatusCode(401, "Unauthorized");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);
-
                 if (client == null) //lo buscamos como cliente en nuestra base de datos
                 {
                     return Forbid();
@@ -159,10 +157,11 @@ namespace backend.Controllers
         {
             try
             {
-                //validamos datos antes
-                if (String.IsNullOrEmpty(client.Email) || String.IsNullOrEmpty(client.Password) || String.IsNullOrEmpty(client.FirstName) || String.IsNullOrEmpty(client.LastName))
-                    return StatusCode(403, "datos inválidos"); //el 403 es = que el Forbid 
-
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    return StatusCode(403, "Unauthorized" );
+                }
                 //buscamos si ya existe el usuario
                 Client user = _clientRepository.FindByEmail(client.Email); //buscamos en el repositorio
                 if (user != null)

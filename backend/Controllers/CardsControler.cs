@@ -66,14 +66,11 @@ namespace backend.Controllers
                 {
                     return Forbid();
                 }
-
                 Client client = _clientRepository.FindByEmail(email);
-
                 if (client == null)
                 {
                     return Forbid();
                 }
-
                 Card auxCard = _cardRepository.FindById(card.Id);
                 if (auxCard == null)
                 {
@@ -96,7 +93,34 @@ namespace backend.Controllers
                     _cardRepository.Save(auxCard);
                     return Ok(auxCard);
                 }      
-
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpDelete("clients/current/cards/{id}")]
+        public IActionResult Delete(long id)
+        {
+            try
+            {
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                if (email == null)
+                {
+                    return Forbid();
+                }
+                Client client = _clientRepository.FindByEmail(email);
+                if (client == null)
+                {
+                    return Forbid();
+                }
+                Card cardToDelete = _cardRepository.FindById(id);
+                if (cardToDelete == null || cardToDelete.ClientId != client.Id)
+                {
+                    return NotFound();
+                }
+                _cardRepository.DeleteCard(cardToDelete); // Método para eliminar en el repositorio
+                return Ok(new { message = "Tarjeta eliminada con éxito." });
             }
             catch (Exception ex)
             {

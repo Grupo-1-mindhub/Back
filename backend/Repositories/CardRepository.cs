@@ -35,6 +35,11 @@ namespace backend.Repositories
 
             SaveChanges();
         }
+        public void DeleteCard(Card card)
+        {
+            Delete(card);
+            SaveChanges();
+        }
     }
 
 }

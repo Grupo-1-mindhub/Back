@@ -50,6 +50,11 @@ namespace backend.Repositories
             .Include(account => account.Transactions)
             .FirstOrDefault();
         }
+        public void DeleteAccount(Account account)
+        {
+            Delete(account);
+            SaveChanges();
+        }
     }
 
 }
