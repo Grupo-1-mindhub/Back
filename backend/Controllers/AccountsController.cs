@@ -128,10 +128,15 @@ namespace backend.Controllers
                 {
                     return StatusCode(403, "cliente no encontrado");
                 }
-                int num = cl.Accounts.Count() + 1;
+
+                //esto capaz se va a romper si no tiene cuentas por eso lo comento
+                //int num = cl.Accounts.Count() + 1;
+
+                var random = new Random();
+                string num = "VIN-" + random.Next(0, 99999999).ToString().PadLeft(8, '0');
                 Account newAcc = new Account
                 {
-                    Number = num.ToString("D3"),
+                    Number = num,
                     Description=account.Description,
                     CreationDate = DateTime.Now,
                     Balance = 0,
