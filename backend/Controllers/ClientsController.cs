@@ -133,7 +133,15 @@ namespace backend.Controllers
                         Balance = ac.Balance,
                         Description = ac.Description,
                         CreationDate = ac.CreationDate,
-                        Number = ac.Number
+                        Number = ac.Number,
+                        Transactions = ac.Transactions.Select(tr => new TransactionDTO
+                        {
+                            Id = tr.Id,
+                            Amount = tr.Amount,
+                            Description = tr.Description,
+                            //CategoryId = tr.CategoryId,
+                            CreationDate = tr.CreationDate, 
+                            }).ToList(),
                     }).ToList(),
                     Cards = client.Cards.Select(c => new CardDTO
                     {
