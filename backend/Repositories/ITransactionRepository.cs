@@ -8,5 +8,6 @@ namespace backend.Repositories
         IEnumerable<Transaction> GetAllTransactions();
         void Save(Transaction transaction);
         Transaction FindByNumber(long id);
+        void DeleteTransaction(Transaction transaction);
     }
 }

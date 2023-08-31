@@ -3,6 +3,7 @@ using backend.Models;
 using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -59,10 +60,11 @@ namespace backend.Controllers
         {
             try
             {
-                string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                if (email == string.Empty)
-                    return StatusCode(403, "Cliente no autorizado");
-
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    return StatusCode(403, "Unauthorized");
+                }
                 Client cl = _clientRepository.FindByEmail(email);
                 if (cl == null)
                     return StatusCode(403, "Cliente no encontrado");
@@ -117,6 +119,31 @@ namespace backend.Controllers
                 //devolver dto con la transaction creada
                 return Ok();
             
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpDelete("transactions/{id}")]
+        public IActionResult DeleteTransaction(long id)
+        {
+            try
+            {
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    return StatusCode(403, "Unauthorized");
+                }
+                Client client = _clientRepository.FindByEmail(email);
+                if (client == null)
+                    return StatusCode(403, "Cliente no encontrado");
+
+                Transaction transactionToDelete = _transactionRepository.FindByNumber(id);
+                if (transactionToDelete == null )
+                    return NotFound();
+                _transactionRepository.DeleteTransaction(transactionToDelete);
+                return Ok(new { message = "Transacción eliminada exitosamente." });
             }
             catch (Exception ex)
             {

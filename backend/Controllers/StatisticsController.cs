@@ -35,8 +35,6 @@ namespace backend.Controllers
                 if (accs == null)
                     return StatusCode(403, "El cliente no tiene cuentas");
 
-
-
                 var trans = new List<TransactionDTO>();
                 foreach (Account acc in accs)
                 {

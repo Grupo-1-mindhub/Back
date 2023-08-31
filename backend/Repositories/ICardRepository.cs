@@ -8,5 +8,6 @@ namespace backend.Repositories
     {
         void Save(Card card);
         Card FindById(long id);
+        void DeleteCard(Card card);
     }
 }

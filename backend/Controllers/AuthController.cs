@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using backend.Services;
 using backend.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
@@ -56,6 +57,23 @@ namespace backend.Controllers
                 {
                     return StatusCode(500, ex.Message);
                 }
+            }
+            [HttpGet("CorrectToken")]
+            [Authorize]
+            public IActionResult CorrectToken()
+            {
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                if (email == string.Empty)
+                {
+                    return StatusCode(401, "Unauthorized");
+                }
+                Client client = _clientRepository.FindByEmail(email);
+                if (client == null) //lo buscamos como cliente en nuestra base de datos
+                {
+                     return Forbid();
+                }
+
+                return Ok(new { mensaje = "Usuario autenticado correctamente" });
             }
     }
 }

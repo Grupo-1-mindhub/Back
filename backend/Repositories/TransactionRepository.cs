@@ -23,5 +23,10 @@ namespace HomeBanking.Repositories
             Create(transaction);
             SaveChanges();
         }
+        public void DeleteTransaction(Transaction transaction)
+        {
+            Delete(transaction);
+            SaveChanges();
+        }
     }
 }

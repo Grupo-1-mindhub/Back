@@ -152,5 +152,33 @@ namespace backend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpDelete("accounts/{id}")]
+        public IActionResult DeleteAccount(long id)
+        {
+            try
+            {
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    return StatusCode(403, "Cliente no autorizado");
+                }
+                Client client = _clientRepository.FindByEmail(email);
+                if (client == null)
+                {
+                    return StatusCode(403, "Cliente no encontrado");
+                }
+                Account accountToDelete = _accountRepository.FindById(id);
+                if (accountToDelete == null || accountToDelete.ClientId != client.Id)
+                {
+                    return NotFound();
+                }
+                _accountRepository.DeleteAccount(accountToDelete);
+                return Ok(new { message = "Cuenta eliminada exitosamente." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

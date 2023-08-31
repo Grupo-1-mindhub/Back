@@ -6,6 +6,5 @@
         public string Type { get; set; }
         public string Number { get; set; }
         public DateTime DeadLine{ get; set; }
-
     }
 }
