@@ -59,9 +59,9 @@ namespace backend.Controllers
                 }
             }
             [HttpGet("CorrectToken")]
+            [Authorize]
             public IActionResult CorrectToken()
             {
- 
                 var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
                 if (email == string.Empty)
                 {
