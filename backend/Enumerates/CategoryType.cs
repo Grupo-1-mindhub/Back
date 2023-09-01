@@ -3,10 +3,10 @@
     public enum CategoryType
     {
         GENERAL,
-        COMIDA,
-        ENTRETENIMIENTO,
-        SERVICIOS,
-        SUPERMERCADO,
-        TRANSPORTE
+        FOOD,
+        ENTERTAINMENT,
+        SERVICES,
+        MARKET,
+        TRANSPORT
     }
 }

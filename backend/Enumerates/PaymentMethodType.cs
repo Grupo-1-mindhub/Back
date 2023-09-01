@@ -2,8 +2,8 @@
 {
     public enum PaymentMethodType
     {
-        EFECTIVO,
-        DEBITO,
-        CREDITO
+        CASH,
+        DEBIT,
+        CREDIT
     }
 }

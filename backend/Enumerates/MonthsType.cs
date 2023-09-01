@@ -2,17 +2,17 @@
 {
     public enum MonthsType
     {
-        ENERO,
-        FEBRERO,
-        MARZO,
-        ABRIL,
-        MAYO,
-        JUNIO,
-        JULIO,
-        AGOSTO,
-        SEPTIEMBRE,
-        OCTUBRE,
-        NOVIEMBRE,
-        DICIEMBRE
+        JANUARY,
+        FEBRUARY,
+        MARCH,
+        APRIL,
+        MAY,
+        JUNE,
+        JULY,
+        AUGUST,
+        SEPTEMBER,
+        OCTOBER,
+        NOVEMBER,
+        DECEMBER
     }
 }
