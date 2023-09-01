@@ -11,7 +11,7 @@ namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
     public class ClientsController : Controller
     {
         private IClientRepository _clientRepository;
@@ -160,16 +160,12 @@ namespace backend.Controllers
         }
 
         [HttpPost] //CREAR UN NUEVO CLIENTE
-        //un POST y no un GET porque enviamos datos del Front al Back y el GET es para solicitar datos del Back
-        public IActionResult Post([FromBody] Client client)
+        public IActionResult Post([FromBody] RegisterDTO client)
         {
             try
             {
-                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
-                if (string.IsNullOrEmpty(email))
-                {
-                    return StatusCode(403, "Unauthorized" );
-                }
+                if (String.IsNullOrEmpty(client.Email) || String.IsNullOrEmpty(client.Password) || String.IsNullOrEmpty(client.FirstName) || String.IsNullOrEmpty(client.LastName))
+                    return StatusCode(403, "Invalid Data");
                 //buscamos si ya existe el usuario
                 Client user = _clientRepository.FindByEmail(client.Email); //buscamos en el repositorio
                 if (user != null)
@@ -185,32 +181,13 @@ namespace backend.Controllers
                     LastName = client.LastName,
                 };
                 _clientRepository.Save(newClient); //usamos el repo para utilizar el metodo SAVE 
-                int num = 001;
-                Account newAccount = new Account
-                {
-                    Number = num.ToString("D3"),
-                    Description=string.Empty,
-                    CreationDate = DateTime.Now,
-                    Balance = 0,
-                    ClientId = newClient.Id,
-                };
-                _accountRepository.Save(newAccount);
                 ClientDTO newCDTO = new ClientDTO
                 {
-                    Id = newClient.Id,
-                    Email = newClient.Email,
-                    FirstName = newClient.FirstName,
-                    LastName = newClient.LastName,
-                    Accounts = newClient.Accounts.Select(account => new AccountDTO
-                    {
-                        Id = account.Id,
-                        Number = account.Number,
-                        Description = account.Description,
-                        CreationDate = account.CreationDate,
-                        Balance = account.Balance,
-                    }).ToList()
+                    FirstName = client.FirstName,
+                    LastName = client.LastName,
+                    Email = client.Email,
                 };
-                return Created("", newCDTO); //le devolvemos el cliente 
+                return Ok();
 
             }
             catch (Exception ex)
