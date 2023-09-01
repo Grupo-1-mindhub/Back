@@ -123,12 +123,13 @@ namespace backend.Controllers
                         trans.Add(transactionDTO);
                     }
                     groupedTransactions = trans
+                        .Where(t => t.Amount < 0) // Filtramos solo los valores negativos
                         .GroupBy(t => t.Category)
-                       .Select(group => new TransactionDTO
-                       {
-                           Category = group.Key,
-                           Amount = group.Sum(t => t.Amount)
-                       })
+                        .Select(group => new TransactionDTO
+                        {
+                            Category = group.Key,
+                            Amount = group.Sum(t => t.Amount)
+                        })
                         .ToList();
 
                 }
