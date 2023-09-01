@@ -114,7 +114,7 @@ namespace backend.Controllers
             }
         }
         [HttpPost("clients/current/accounts")]  //crear una nueva cuenta
-        public IActionResult Post([FromBody]Account account)
+        public IActionResult Post([FromBody]AccountCreationDTO account)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace backend.Controllers
                     Number = num,
                     Description=account.Description,
                     CreationDate = DateTime.Now,
-                    Balance = 0,
+                    Balance = account.Balance,
                     ClientId = cl.Id
                 };
                 _accountRepository.Save(newAcc);
