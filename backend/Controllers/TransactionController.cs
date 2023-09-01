@@ -151,7 +151,7 @@ namespace backend.Controllers
                 updatedAccount.Balance += transactionToDelete.Amount * -1;
                 _accountRepository.Save(updatedAccount);
 
-                return Ok(new { message = "Transacción eliminada exitosamente." });
+                return Ok(new { message = "Transaccion eliminada exitosamente." });
             }
             catch (Exception ex)
             {
