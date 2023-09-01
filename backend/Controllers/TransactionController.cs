@@ -56,6 +56,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("clients/current/{accountId}/transactions")]
+        [Authorize]
         public IActionResult Post([FromBody] Transaction transaction, long accountId)
         {
             try
@@ -126,6 +127,7 @@ namespace backend.Controllers
             }
         }
         [HttpDelete("transactions/{id}")]
+        [Authorize]
         public IActionResult DeleteTransaction(long id)
         {
             try
@@ -140,9 +142,15 @@ namespace backend.Controllers
                     return StatusCode(403, "Cliente no encontrado");
 
                 Transaction transactionToDelete = _transactionRepository.FindByNumber(id);
+
                 if (transactionToDelete == null )
                     return NotFound();
                 _transactionRepository.DeleteTransaction(transactionToDelete);
+
+                Account updatedAccount = _accountRepository.FindById(transactionToDelete.AccountId);
+                updatedAccount.Balance += transactionToDelete.Amount * -1;
+                _accountRepository.Save(updatedAccount);
+
                 return Ok(new { message = "Transacción eliminada exitosamente." });
             }
             catch (Exception ex)
