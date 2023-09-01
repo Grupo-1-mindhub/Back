@@ -89,5 +89,63 @@ namespace backend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+       
+        [HttpGet("clients/accounts/{id}/statistics/category")]
+        public IActionResult GetCategoryByAccount(long id)
+        {
+            try
+            {
+                var groupedTransactions = new List<TransactionDTO>();
+                Client cl = _clientRepository.FindById(id);
+                if (cl == null)
+                {
+                    return StatusCode(403, "Cliente no encontrado");
+                }
+
+                var accs = cl.Accounts;
+                if (accs == null)
+                    return StatusCode(403, "El cliente no tiene cuentas");
+
+                var trans = new List<TransactionDTO>();
+                foreach (Account acc in accs)
+                {
+                    foreach (Transaction trs in acc.Transactions)
+                    {
+                        var transactionDTO = new TransactionDTO
+                        {
+                            Id = trs.Id,
+                            Amount = trs.Amount,
+                            Description = trs.Description,
+                            CreationDate = trs.CreationDate,
+                            Category= trs.Category.ToString()
+
+                        };
+                        trans.Add(transactionDTO);
+                    }
+                    groupedTransactions = trans
+                        .GroupBy(t => t.Category)
+                       .Select(group => new TransactionDTO
+                       {
+                           Category = group.Key,
+                           Amount = group.Sum(t => t.Amount)
+                       })
+                        .ToList();
+
+                }
+              
+                return Ok(new
+                {
+                    groupedTransactions
+                });
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        } 
+
+
     }
 }

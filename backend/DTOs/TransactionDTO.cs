@@ -10,5 +10,10 @@ namespace backend.DTOs
         public string Description { get; set; }
         public string Category { get; set; }
         public DateTime CreationDate { get; set; }
+
+        public static implicit operator TransactionDTO(TransactionDTO v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
