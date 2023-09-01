@@ -43,7 +43,7 @@ namespace backend.Controllers
                         Amount = transaction.Amount,
                         Description = transaction.Description,
                         CreationDate = transaction.CreationDate,
-                        Category=category.Description
+                        Category=category.Id
                     };
                     transactionDTO.Add(newTransactionDTO);
                 }

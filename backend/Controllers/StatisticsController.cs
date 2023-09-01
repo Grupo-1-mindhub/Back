@@ -117,7 +117,7 @@ namespace backend.Controllers
                             Amount = trs.Amount,
                             Description = trs.Description,
                             CreationDate = trs.CreationDate,
-                            Category= trs.Category.ToString()
+                            Category= trs.CategoryId
 
                         };
                         trans.Add(transactionDTO);

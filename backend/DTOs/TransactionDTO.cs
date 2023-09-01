@@ -8,12 +8,9 @@ namespace backend.DTOs
         public long Id { get; set; }
         public double Amount { get; set; }  
         public string Description { get; set; }
-        public string Category { get; set; }
+        public long Category { get; set; }
         public DateTime CreationDate { get; set; }
 
-        public static implicit operator TransactionDTO(TransactionDTO v)
-        {
-            throw new NotImplementedException();
-        }
+     
     }
 }
