@@ -10,8 +10,8 @@ namespace backend.Models
             {
                 var paymentMethods = new PaymentMethod[]
                 {
-                    new PaymentMethod {Description = PaymentMethodType.EFECTIVO.ToString() },
-                    new PaymentMethod {Description = PaymentMethodType.DEBITO.ToString() }
+                    new PaymentMethod {Description = PaymentMethodType.CASH.ToString() },
+                    new PaymentMethod {Description = PaymentMethodType.DEBIT.ToString() }
                 };
 
                 foreach (var paymentMethod in paymentMethods)
@@ -28,11 +28,11 @@ namespace backend.Models
                 var categories = new Category[]
                 {
                     new Category { Description = CategoryType.GENERAL.ToString() },
-                    new Category { Description = CategoryType.COMIDA.ToString() },
-                    new Category { Description = CategoryType.ENTRETENIMIENTO.ToString() },
-                    new Category { Description = CategoryType.SERVICIOS.ToString() },
-                    new Category { Description = CategoryType.SUPERMERCADO.ToString() },
-                    new Category { Description = CategoryType.TRANSPORTE.ToString() },
+                    new Category { Description = CategoryType.FOOD.ToString() },
+                    new Category { Description = CategoryType.ENTERTAINMENT.ToString() },
+                    new Category { Description = CategoryType.SERVICES.ToString() },
+                    new Category { Description = CategoryType.MARKET.ToString() },
+                    new Category { Description = CategoryType.TRANSPORT.ToString() },
                 };
 
                 foreach (var category in categories)
