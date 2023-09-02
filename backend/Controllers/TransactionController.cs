@@ -26,14 +26,28 @@ namespace backend.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        [HttpGet("transactions")]
-        public IActionResult Get() 
+        [HttpGet("clients/current/account/{id}/transactions")]
+        [Authorize]
+
+        public IActionResult Get(long id) 
         {
             try
             {
-                var tran = _transactionRepository.GetAllTransactions();
-                var transactionDTO = new List<TransactionDTO>();
-                foreach (var transaction in tran)
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    return StatusCode(403, "Unauthorized");
+                }
+                Client cl = _clientRepository.FindByEmail(email);
+                if (cl == null)
+                    return StatusCode(403, "Cliente no encontrado");
+
+                Account account = cl.Accounts.FirstOrDefault(account => account.Id ==id);
+                if (account == null)
+                    return StatusCode(403, "Cuenta inexistente");
+
+                var tran = new List<TransactionDTO>();
+                foreach (var transaction in account.Transactions)
                 {
                     var categoryid = transaction.CategoryId;
                     Category category = _categoryRepository.FindById(categoryid);
@@ -45,9 +59,9 @@ namespace backend.Controllers
                         CreationDate = transaction.CreationDate,
                         Category=category.Id
                     };
-                    transactionDTO.Add(newTransactionDTO);
+                    tran.Add(newTransactionDTO);
                 }
-                return Ok(transactionDTO);
+                return Ok(tran);
             }
             catch (Exception ex)
             {
