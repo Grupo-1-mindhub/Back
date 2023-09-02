@@ -77,7 +77,9 @@ namespace backend.Models
                 {
                     var accounts = new Account[]
                     {
-                        new Account {ClientId = clientJuan.Id, CreationDate = DateTime.Now, Number = "001", Balance = 10000, Description = "test"}
+                        new Account {ClientId = clientJuan.Id, CreationDate = DateTime.Now, Number = "001", Balance = 10000, Description = "UALA"},
+                        new Account {ClientId = clientJuan.Id, CreationDate = DateTime.Now, Number = "002", Balance = 10000, Description = "ICBC"},
+                        new Account {ClientId = clientJuan.Id, CreationDate = DateTime.Now, Number = "003", Balance = 10000, Description = "BBVA"}
                     };
                     foreach (Account account in accounts)
                     {
@@ -92,6 +94,8 @@ namespace backend.Models
             if (!context.Transactions.Any())
             {
                 var account1 = context.Accounts.FirstOrDefault(c => c.Number == "001");
+                var account2 = context.Accounts.FirstOrDefault(c => c.Number == "002");
+                var account3 = context.Accounts.FirstOrDefault(c => c.Number == "003");
                 var paymentMethod = context.PaymentMethods.FirstOrDefault(c => c.Id == 1);
                 var category1 = context.Categories.FirstOrDefault(c => c.Id == 1);
                 var category2 = context.Categories.FirstOrDefault(c => c.Id == 2);
@@ -104,6 +108,7 @@ namespace backend.Models
                 {
                     var transactions = new Transaction[]
                     {
+                        //Gastos UALA
                         new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = -2000, CreationDate = new DateTime(2023, 1, 15), Description = "Nafta" },
                         new Transaction { CategoryId = category2.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = -450, CreationDate = new DateTime(2023, 1, 17), Description = "Salida" },
                         new Transaction { CategoryId = category2.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = -1500, CreationDate = new DateTime(2023, 2, 10), Description = "Gasoil" },
@@ -118,11 +123,45 @@ namespace backend.Models
                         new Transaction { CategoryId = category4.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = -300, CreationDate = new DateTime(2023, 10, 14), Description = "Libros" },
                         new Transaction { CategoryId = category6.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = -550, CreationDate = new DateTime(2023, 11, 30), Description = "Café" },
                         new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = -1000, CreationDate = new DateTime(2023, 12, 5), Description = "Vacaciones" },
-                        //Ingresos
+                        //Ingresos UALA
                         
                         new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = 15000, CreationDate =  new DateTime(2023, 1, 15), Description = "Deposito" },
                         new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = 20000, CreationDate =  new DateTime(2023, 6, 8), Description = "Deposito" },
                         new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account1.Id, Amount = 5000, CreationDate =  new DateTime(2023, 10, 14), Description = "Deposito" },
+                        
+                        //Gastos ICBC
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = -2000, CreationDate = new DateTime(2023, 7, 15), Description = "Nafta" },
+                        new Transaction { CategoryId = category2.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = -450, CreationDate = new DateTime(2023, 3, 17), Description = "Salida" },
+                        new Transaction { CategoryId = category6.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = -900, CreationDate = new DateTime(2023, 5, 22), Description = "Electrónicos" },
+                        new Transaction { CategoryId = category4.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = -1200, CreationDate = new DateTime(2023, 6, 8), Description = "Ropa" },
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = -450, CreationDate = new DateTime(2023, 8, 17), Description = "Salida" },
+                        new Transaction { CategoryId = category3.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = -900, CreationDate = new DateTime(2023, 8, 22), Description = "Electrónicos" },
+                        new Transaction { CategoryId = category2.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = -700, CreationDate = new DateTime(2023, 1, 6), Description = "Regalos" },
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = -1000, CreationDate = new DateTime(2023, 10, 5), Description = "Vacaciones" },
+                        //Ingresos ICBC
+                        
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = 7500, CreationDate =  new DateTime(2023, 7, 15), Description = "Deposito" },
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = 2000, CreationDate =  new DateTime(2023, 1, 8), Description = "Deposito" },
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account2.Id, Amount = 5000, CreationDate =  new DateTime(2023, 12, 14), Description = "Deposito" },
+
+
+                         //Gastos BBVA
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = -2000, CreationDate = new DateTime(2023, 6, 15), Description = "Nafta" },
+                        new Transaction { CategoryId = category2.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = -450, CreationDate = new DateTime(2023, 3, 17), Description = "Salida" },
+                        new Transaction { CategoryId = category6.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = -900, CreationDate = new DateTime(2023, 5, 22), Description = "Electrónicos" },
+                        new Transaction { CategoryId = category4.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = -1200, CreationDate = new DateTime(2023, 6, 8), Description = "Ropa" },
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = -450, CreationDate = new DateTime(2023, 3, 17), Description = "Salida" },
+                        new Transaction { CategoryId = category3.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = -900, CreationDate = new DateTime(2023, 7, 22), Description = "Electrónicos" },
+                        new Transaction { CategoryId = category2.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = -700, CreationDate = new DateTime(2023, 1, 6), Description = "Regalos" },
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = -1000, CreationDate = new DateTime(2023, 4, 5), Description = "Vacaciones" },
+                        //Ingresos BBVA
+                        
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = 7500, CreationDate =  new DateTime(2023, 2, 15), Description = "Deposito" },
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = 2000, CreationDate =  new DateTime(2023, 7, 8), Description = "Deposito" },
+                        new Transaction { CategoryId = category1.Id, PaymentMethodId = paymentMethod.Id, AccountId = account3.Id, Amount = 5000, CreationDate =  new DateTime(2023, 5, 14), Description = "Deposito" },
+
+
+
                     };
                     foreach (Transaction transaction in transactions)
                     {

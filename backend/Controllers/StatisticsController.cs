@@ -20,8 +20,8 @@ namespace backend.Controllers
    
             _clientRepository = clientRepository;
         }
-        [HttpGet("clients/accounts/statistics/anual")]
-        public IActionResult GetBudgetsByAccount()
+        [HttpGet("clients/accounts/{id}/statistics/anual")]
+        public IActionResult GetBudgetsByAccount(long id)
         {
             try
             {
@@ -38,8 +38,9 @@ namespace backend.Controllers
                     return StatusCode(403, "El cliente no tiene cuentas");
 
                 var trans = new List<TransactionDTO>();
-                foreach (Account acc in accs)
-                {
+                Account acc = cl.Accounts.FirstOrDefault(account => account.Id == id);
+            
+                
                     foreach (Transaction trs in acc.Transactions)
                     {
                         var transactionDTO = new TransactionDTO
@@ -52,7 +53,7 @@ namespace backend.Controllers
                         trans.Add(transactionDTO);
                     }
                     
-                }
+                
                 var positiveTransactions = trans.Where(tr => tr.Amount > 0).ToList();
                 var negativeTransactions = trans.Where(tr => tr.Amount < 0).ToList();
 
@@ -92,8 +93,8 @@ namespace backend.Controllers
             }
         }
        
-        [HttpGet("clients/accounts/statistics/category")]
-        public IActionResult GetCategoryByAccount()
+        [HttpGet("clients/accounts/{id}/statistics/category")]
+        public IActionResult GetCategoryByAccount(long id)
         {
             try
             {
@@ -111,9 +112,9 @@ namespace backend.Controllers
                     return StatusCode(403, "El cliente no tiene cuentas");
 
                 var trans = new List<TransactionDTO>();
-                foreach (Account acc in accs)
-                {
-                    foreach (Transaction trs in acc.Transactions)
+
+                Account acc = cl.Accounts.FirstOrDefault(account => account.Id == id);
+                foreach (Transaction trs in acc.Transactions)
                     {
                         var transactionDTO = new TransactionDTO
                         {
@@ -136,7 +137,7 @@ namespace backend.Controllers
                         })
                         .ToList();
 
-                }
+                
               
                 return Ok(new
                 {
