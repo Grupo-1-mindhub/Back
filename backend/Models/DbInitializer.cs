@@ -53,6 +53,13 @@ namespace backend.Models
                         LastName = "Perez",
                         Password = "test",
                         Email = "test"
+                    },
+                    new Client
+                    {
+                        FirstName = "Pedro",
+                        LastName = "Sanchez",
+                        Password = "test",
+                        Email = "test@test.com"
                     }
                 };
                 foreach (Client client in clients)
