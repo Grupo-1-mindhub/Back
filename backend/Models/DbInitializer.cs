@@ -11,7 +11,8 @@ namespace backend.Models
                 var paymentMethods = new PaymentMethod[]
                 {
                     new PaymentMethod {Description = PaymentMethodType.CASH.ToString() },
-                    new PaymentMethod {Description = PaymentMethodType.DEBIT.ToString() }
+                    new PaymentMethod {Description = PaymentMethodType.DEBIT.ToString() },
+                    new PaymentMethod {Description = PaymentMethodType.CREDIT.ToString() }
                 };
 
                 foreach (var paymentMethod in paymentMethods)
