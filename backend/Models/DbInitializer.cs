@@ -52,7 +52,7 @@ namespace backend.Models
                         FirstName = "Juan",
                         LastName = "Perez",
                         Password = "test",
-                        Email = "test"
+                        Email = "juan@gmail.com"
                     },
                     new Client
                     {
@@ -71,7 +71,7 @@ namespace backend.Models
 
             if (!context.Accounts.Any())
             {
-                var clientJuan = context.Clients.FirstOrDefault(c => c.Email == "test@test.com");
+                var clientJuan = context.Clients.FirstOrDefault(c => c.Email == "juan@gmail.com");
                 if (clientJuan != null)
                 {
                     var accounts = new Account[]
