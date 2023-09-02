@@ -71,7 +71,7 @@ namespace backend.Models
 
             if (!context.Accounts.Any())
             {
-                var clientJuan = context.Clients.FirstOrDefault(c => c.Email == "test");
+                var clientJuan = context.Clients.FirstOrDefault(c => c.Email == "test@test.com");
                 if (clientJuan != null)
                 {
                     var accounts = new Account[]

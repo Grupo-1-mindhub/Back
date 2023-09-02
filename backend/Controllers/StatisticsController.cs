@@ -4,6 +4,7 @@ using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -19,13 +20,14 @@ namespace backend.Controllers
    
             _clientRepository = clientRepository;
         }
-        [HttpGet("clients/accounts/{id}/statistics")]
-        public IActionResult GetBudgetsByAccount(long id)
+        [HttpGet("clients/accounts/statistics/anual")]
+        public IActionResult GetBudgetsByAccount()
         {
             try
             {
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
 
-                Client cl = _clientRepository.FindById(id);
+                Client cl = _clientRepository.FindByEmail(email);
                 if (cl == null)
                 {
                     return StatusCode(403, "Cliente no encontrado");
@@ -90,13 +92,15 @@ namespace backend.Controllers
             }
         }
        
-        [HttpGet("clients/accounts/{id}/statistics/category")]
-        public IActionResult GetCategoryByAccount(long id)
+        [HttpGet("clients/accounts/statistics/category")]
+        public IActionResult GetCategoryByAccount()
         {
             try
             {
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+
                 var groupedTransactions = new List<TransactionDTO>();
-                Client cl = _clientRepository.FindById(id);
+                Client cl = _clientRepository.FindByEmail(email);
                 if (cl == null)
                 {
                     return StatusCode(403, "Cliente no encontrado");
