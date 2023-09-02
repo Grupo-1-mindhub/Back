@@ -55,9 +55,10 @@ namespace backend.Controllers
             }
         }
 
-        [HttpPost("clients/current/{accountId}/transactions")]
+        //creo que no es necesario que se pase {accountId} porque desde el body ya tenemos el accountId
+        [HttpPost("clients/current/transactions")]
         [Authorize]
-        public IActionResult Post([FromBody] Transaction transaction, long accountId)
+        public IActionResult Post([FromBody] Transaction transaction)
         {
             try
             {
@@ -70,7 +71,7 @@ namespace backend.Controllers
                 if (cl == null)
                     return StatusCode(403, "Cliente no encontrado");
 
-                Account account = cl.Accounts.FirstOrDefault(account => account.Id == accountId);
+                Account account = cl.Accounts.FirstOrDefault(account => account.Id == transaction.AccountId);
                 if (account == null)
                     return StatusCode(403, "Cuenta inexistente");
 
