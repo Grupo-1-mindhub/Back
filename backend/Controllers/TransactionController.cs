@@ -101,7 +101,7 @@ namespace backend.Controllers
                     Amount = transactionDTO.Amount * -1,
                     Description = transactionDTO.Description,
                     CreationDate = DateTime.Now,
-                    AccountId = 1,
+                    AccountId = transactionDTO.AccountId,
                     PaymentMethodId = transactionDTO.PaymentMethodId,
                     CategoryId= transactionDTO.CategoryId
                 });
