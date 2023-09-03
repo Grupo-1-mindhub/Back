@@ -34,7 +34,7 @@ namespace backend.Controllers
                 }
 
                 var accs = cl.Accounts;
-                if (accs == null || accs.Count() == 0)
+                if (accs == null || accs.Count() == 0 || id == 0)
                     return StatusCode(403, "El cliente no tiene cuentas");
 
                 var trans = new List<TransactionDTO>();
@@ -108,7 +108,7 @@ namespace backend.Controllers
                 }
 
                 var accs = cl.Accounts;
-                if (accs == null || accs.Count() == 0)
+                if (accs == null || accs.Count() == 0 || id == 0)
                     return StatusCode(403, "El cliente no tiene cuentas");
 
                 var trans = new List<TransactionDTO>();
