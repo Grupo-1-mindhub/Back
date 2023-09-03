@@ -195,5 +195,40 @@ namespace backend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPut("update")]
+        [Authorize]
+        public IActionResult Put( [FromBody] UpdateClientDTO updateClient)
+        {
+            try
+            {
+                var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                if (email == string.Empty)
+                {
+                    return StatusCode(401, "Unauthorized");
+                }
+
+                Client client = _clientRepository.FindByEmail(email);
+                if (client == null) //lo buscamos como cliente en nuestra base de datos
+                {
+                    return Forbid();
+                }
+
+                // Actualiza los campos que desees
+                client.FirstName = updateClient.FirstName;
+                client.LastName = updateClient.LastName;
+                client.Email= updateClient.Email;
+                // Actualiza otros campos según sea necesario
+
+                // Guarda los cambios en el repositorio
+                _clientRepository.Save(client);
+
+                return Ok(); // Devuelve el cliente actualizado
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

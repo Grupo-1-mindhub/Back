@@ -38,9 +38,17 @@ namespace backend.Repositories
 
         public void Save(Client client)
         {
-            Create(client); 
-            SaveChanges(); 
+            if (client.Id == 0)
+            {
+                Create(client);
+            }
+            else
+            {
+                Update(client);
+            }
+            SaveChanges();
         }
+
     }
 }
 
