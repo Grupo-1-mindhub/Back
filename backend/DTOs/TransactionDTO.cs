@@ -10,7 +10,9 @@ namespace backend.DTOs
         public string Description { get; set; }
         public long Category { get; set; }
         public DateTime CreationDate { get; set; }
-
+        public long AccountId { get; set; }
+        public long CategoryId { get; set; }
+        public long PaymentMethodId { get; set; }
      
     }
 }

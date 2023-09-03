@@ -72,7 +72,7 @@ namespace backend.Controllers
         //creo que no es necesario que se pase {accountId} porque desde el body ya tenemos el accountId
         [HttpPost("clients/current/transactions")]
         [Authorize]
-        public IActionResult Post([FromBody] Transaction transaction)
+        public IActionResult Post([FromBody] TransactionDTO transactionDTO)
         {
             try
             {
@@ -85,25 +85,25 @@ namespace backend.Controllers
                 if (cl == null)
                     return StatusCode(403, "Cliente no encontrado");
 
-                Account account = cl.Accounts.FirstOrDefault(account => account.Id == transaction.AccountId);
+                Account account = cl.Accounts.FirstOrDefault(account => account.Id == transactionDTO.AccountId);
                 if (account == null)
                     return StatusCode(403, "Cuenta inexistente");
 
  
-                if (transaction.Amount <= 0 || transaction.Description == string.Empty) 
+                if (transactionDTO.Amount <= 0 || transactionDTO.Description == string.Empty) 
                     return StatusCode(403, "Datos invalidos");
 
-                if (account.Balance < transaction.Amount )
+                if (account.Balance < transactionDTO.Amount )
                     return StatusCode(403, "Fondos insuficientes para realizar la operacion");
 
                 _transactionRepository.Save(new Transaction
                 {  
-                    Amount = transaction.Amount * -1,
-                    Description = transaction.Description,
+                    Amount = transactionDTO.Amount * -1,
+                    Description = transactionDTO.Description,
                     CreationDate = DateTime.Now,
-                    AccountId = account.Id,
-                    PaymentMethodId = transaction.PaymentMethodId,
-                    CategoryId= transaction.CategoryId
+                    AccountId = 1,
+                    PaymentMethodId = transactionDTO.PaymentMethodId,
+                    CategoryId= transactionDTO.CategoryId
                 });
 
 
@@ -118,16 +118,9 @@ namespace backend.Controllers
                     Id = account.Id,
                     Number = account.Number,
                     Description = account.Description,
-                    Balance = account.Balance + transaction.Amount * -1,
+                    Balance = account.Balance + transactionDTO.Amount * -1,
                     CreationDate = account.CreationDate,
                     ClientId = account.ClientId,
-                    Transactions = account.Transactions.Select(tr => new Transaction
-                    {
-                        Id = tr.Id,
-                        Amount = tr.Amount,
-                        Description = tr.Description,
-                        CreationDate = tr.CreationDate,
-                    }).ToList()
                 };
 
                 _accountRepository.Save(updatedAccount);
